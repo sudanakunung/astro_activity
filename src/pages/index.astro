@@ -1,11 +1,275 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import "../styles/global.css";
 ---
 
 <Layout>
-	<Welcome />
+  <div>
+<section class="splide" aria-label="Gallery">
+  <div class="splide__track rounded-md">
+    <ul class="splide__list">
+      <li class="splide__slide">
+        <img class="object-cover h-70 w-full aspect-square" src="https://plus.unsplash.com/premium_photo-1761210594096-38d74e09cd26?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1336" alt="Slide 1" />
+      </li>
+      <li class="splide__slide">
+        <img class="object-cover h-70 w-full aspect-square" src="https://plus.unsplash.com/premium_photo-1761210594096-38d74e09cd26?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1336" alt="Slide 2" />
+      </li>
+      <li class="splide__slide">
+        <img class="object-cover h-70 w-full aspect-square" src="https://plus.unsplash.com/premium_photo-1761210594096-38d74e09cd26?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1336" alt="Slide 3" />
+      </li>
+      <li class="splide__slide">
+        <img class="object-cover h-70 w-full aspect-square" src="https://plus.unsplash.com/premium_photo-1761210594096-38d74e09cd26?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1336" alt="Slide 4" />
+      </li>
+    </ul>
+  </div>
+
+  <div class="splide__arrows">
+    <button class="splide__arrow splide__arrow--prev" aria-label="Previous">‹</button>
+    <button class="splide__arrow splide__arrow--next" aria-label="Next">›</button>
+  </div>
+</section>
+
+<!-- Detail section di bawah slideshow -->
+<section class="details" aria-label="Details">
+  <div class="meta">Jawa Timur Park - PT Bunga Wangsa Sedjati</div>
+  <h1 class="venue-title">Jawa Timur Park 1</h1>
+
+  <nav class="tabs" role="tablist" aria-label="Informasi">
+    <button class="tab active" role="tab" aria-selected="true" data-target="deskripsi">Deskripsi</button>
+    <button class="tab" role="tab" aria-selected="false" data-target="jam">Jam Operasional</button>
+    <button class="tab" role="tab" aria-selected="false" data-target="lokasi">Lokasi</button>
+  </nav>
+
+  <div class="tab-panels">
+    <article id="deskripsi" class="panel active" role="tabpanel">
+      <h2 class="section-title">Sorotan</h2>
+      <ul class="bullets">
+        <li>Benamkan diri Anda dalam hari penuh kegembiraan tanpa henti di Jatim Park 1 dan Museum Tubuh.</li>
+        <li>Menggugah semua penggemar roller coaster! Pilih dari berbagai pilihan, termasuk Himalaya Coaster.</li>
+        <li>Ingin lebih banyak adrenalin? Rasakan sensasi Pendulum 360° dan Tornado Terbang!</li>
+        <li>Biarkah diri Anda kecil kecil lagi bersama-senang dengan wahana ramah anak seperti Froggy, Dragon Coaster dan lainnya.</li>
+        <li>Selami dunia penuh air di Jatim Park 1, tujuan keluarga terbaik yang menawakan wahana yang mengagumkan dan lain-lain.</li>
+      </ul>
+
+      <hr class="divider" />
+
+      <p class="highlight"><strong>Surganya pencari sensasi:</strong><br/>Nikmati berbagai wahana seru untuk penikmat sensasi seperti: Pendulum 360°, Flying Tornado, dan Superman Coaster.</p>
+
+      <p class="highlight"><strong>Kesenangan akuatik:</strong><br/>Nikmati kebahagiaan permainan air di Waterboom dan Funtastic Swimming Pool, menyediakan tempat untuk menikmati kesenangan penuh air bersama orang terkasih.</p>
+
+      <a class="more-link" href="#">Lihat Lebih Banyak <span>›</span></a>
+    </article>
+
+    <article id="jam" class="panel" role="tabpanel" hidden>
+      <h2 class="section-title">Jam Operasional</h2>
+      <p>Senin - Jumat: 09.00 - 17.00</p>
+      <p>Sabtu - Minggu & Hari Libur: 08.00 - 18.00</p>
+      <p><em>Catatan:</em> Jam dapat berubah saat event atau perawatan wahana.</p>
+    </article>
+
+    <article id="lokasi" class="panel" role="tabpanel" hidden>
+      <h2 class="section-title">Lokasi</h2>
+      <p>Jalan Kartika NO. 2, Kota Wisata, Malang, Jawa Timur</p>
+      <a class="map-btn" href="https://www.google.com/maps" target="_blank" rel="noopener">Buka di Google Maps</a>
+    </article>
+  </div>
+</section>
+  </div>
+
+
+<!-- Client-only scripts: Splide + tab behavior -->
+<script type="module">
+  import Splide from 'https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.esm.min.js';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Splide init
+    try {
+      new Splide('.splide', {
+        type: 'loop',
+        perPage: 1,
+        perMove: 1,
+        gap: '1rem',
+        autoplay: true,
+        interval: 3500,
+        pauseOnHover: true,
+        pagination: true,
+        arrows: true,
+        rewind: false,
+        breakpoints: {
+          1024: { perPage: 1 },
+          640: { perPage: 1 },
+        },
+      }).mount();
+    } catch (e) {
+      console.warn('Splide init failed', e);
+    }
+
+    // Tabs behavior
+    const tabs = document.querySelectorAll('.tabs .tab');
+    const panels = document.querySelectorAll('.tab-panels .panel');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.getAttribute('data-target');
+
+        tabs.forEach(t => {
+          t.classList.toggle('active', t === tab);
+          t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+        });
+
+        panels.forEach(p => {
+          if (p.id === target) {
+            p.hidden = false;
+            p.classList.add('active');
+          } else {
+            p.hidden = true;
+            p.classList.remove('active');
+          }
+        });
+      });
+    });
+  });
+</script>
+
+<style>
+  /* Details section styles */
+  .details {
+    max-width: 1200px;
+    margin: 24px auto;
+    padding: 24px;
+    background: #fff;
+  }
+
+  .meta {
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .venue-title {
+    margin: 0 0 20px 0;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #0f172a;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .tab {
+    background: transparent;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #6b7280;
+    font-size: 14px;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    position: relative;
+    bottom: -1px;
+  }
+
+  .tab:hover {
+    color: #111827;
+  }
+
+  .tab.active {
+    color: #16a34a;
+    border-bottom-color: #16a34a;
+    background: transparent;
+  }
+
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+    color: #0f172a;
+    border-bottom: 2px solid #16a34a;
+    padding-bottom: 8px;
+    display: inline-block;
+  }
+
+  .bullets {
+    margin: 0 0 20px 20px;
+    padding: 0;
+    color: #111827;
+    list-style-type: disc;
+    line-height: 1.6;
+  }
+
+  .bullets li {
+    margin-bottom: 8px;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 20px 0;
+  }
+
+  .highlight {
+    background: #f3f4f6;
+    padding: 12px 16px;
+    border-left: 4px solid #16a34a;
+    margin: 16px 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #111827;
+  }
+
+  .highlight strong {
+    color: #0f172a;
+  }
+
+  .more-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 12px;
+    color: #16a34a;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: gap 0.2s;
+  }
+
+  .more-link:hover {
+    gap: 8px;
+  }
+
+  @media (max-width: 768px) {
+    .details {
+      padding: 16px;
+    }
+
+    .venue-title {
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+
+    .tabs {
+      gap: 4px;
+      margin-bottom: 16px;
+    }
+
+    .tab {
+      padding: 10px 14px;
+      font-size: 13px;
+    }
+
+    .bullets {
+      margin: 0 0 16px 18px;
+      font-size: 14px;
+    }
+  }
+</style>
+
 </Layout>

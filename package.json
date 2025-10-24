@@ -9,6 +9,16 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.15.1"
+    "@astrojs/vue": "^5.1.1",
+    "@splidejs/splide": "^4.1.4",
+    "@splidejs/vue-splide": "^0.6.12",
+    "@tailwindcss/vite": "^4.1.16",
+    "astro": "^5.15.1",
+    "astro-carousel": "^3.0.3",
+    "tailwindcss": "^4.1.16",
+    "vue": "^3.5.22"
+  },
+  "devDependencies": {
+    "sass-embedded": "^1.93.2"
   }
 }
