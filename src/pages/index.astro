@@ -37,7 +37,7 @@ import "../styles/global.css";
   <nav class="tabs" role="tablist" aria-label="Informasi">
     <button class="tab active" role="tab" aria-selected="true" data-target="deskripsi">Deskripsi</button>
     <button class="tab" role="tab" aria-selected="false" data-target="jam">Jam Operasional</button>
-    <button class="tab" role="tab" aria-selected="false" data-target="lokasi">Lokasi</button>
+    
   </nav>
 
   <div class="tab-panels">
@@ -67,13 +67,85 @@ import "../styles/global.css";
       <p><em>Catatan:</em> Jam dapat berubah saat event atau perawatan wahana.</p>
     </article>
 
-    <article id="lokasi" class="panel" role="tabpanel" hidden>
-      <h2 class="section-title">Lokasi</h2>
-      <p>Jalan Kartika NO. 2, Kota Wisata, Malang, Jawa Timur</p>
-      <a class="map-btn" href="https://www.google.com/maps" target="_blank" rel="noopener">Buka di Google Maps</a>
-    </article>
+   
   </div>
 </section>
+
+<!-- Ticket Selection Section -->
+<section class="tickets-section" aria-label="Pilihan Tiket">
+  <div class="tickets-container">
+  
+
+    <div class="ticket-list">
+      <div class="ticket-card">
+        <div class="ticket-content">
+          <h3 class="ticket-name">Jatim Park 1 + Museum Tubuh + Museum Angkut Weekend</h3>
+          <p class="ticket-price">Dari <span class="price-value">IDR 200.000</span></p>
+          <button class="detail-toggle" aria-expanded="false">Lihat Detail & Termasuk</button>
+          <div class="accordion-detail" hidden>
+            <ul class="detail-list">
+              <li>✓ Akses Jatim Park 1</li>
+              <li>✓ Akses Museum Tubuh</li>
+              <li>✓ Akses Museum Angkut</li>
+              <li>✓ Berlaku Sabtu, Minggu & Hari Libur</li>
+            </ul>
+          </div>
+        </div>
+        <button class="btn-buy">Pilih</button>
+      </div>
+
+      <div class="ticket-card">
+        <div class="ticket-content">
+          <h3 class="ticket-name">Jatim Park 1 + Museum Tubuh + Museum Angkut Weekday</h3>
+          <p class="ticket-price">Dari <span class="price-value">IDR 180.000</span></p>
+          <button class="detail-toggle" aria-expanded="false">Lihat Detail & Termasuk</button>
+          <div class="accordion-detail" hidden>
+            <ul class="detail-list">
+              <li>✓ Akses Jatim Park 1</li>
+              <li>✓ Akses Museum Tubuh</li>
+              <li>✓ Akses Museum Angkut</li>
+              <li>✓ Berlaku Senin - Jumat</li>
+            </ul>
+          </div>
+        </div>
+        <button class="btn-buy">Pilih</button>
+      </div>
+
+      <div class="ticket-card">
+        <div class="ticket-content">
+          <h3 class="ticket-name">Jatim Park 1 + Museum Angkut Weekend</h3>
+          <p class="ticket-price">Dari <span class="price-value">IDR 170.000</span></p>
+          <button class="detail-toggle" aria-expanded="false">Lihat Detail & Termasuk</button>
+          <div class="accordion-detail" hidden>
+            <ul class="detail-list">
+              <li>✓ Akses Jatim Park 1</li>
+              <li>✓ Akses Museum Angkut</li>
+              <li>✓ Berlaku Sabtu, Minggu & Hari Libur</li>
+            </ul>
+          </div>
+        </div>
+        <button class="btn-buy">Pilih</button>
+      </div>
+
+      <div class="ticket-card">
+        <div class="ticket-content">
+          <h3 class="ticket-name">Jatim Park 1 + Museum Angkut Weekday</h3>
+          <p class="ticket-price">Dari <span class="price-value">IDR 150.000</span></p>
+          <button class="detail-toggle" aria-expanded="false">Lihat Detail & Termasuk</button>
+          <div class="accordion-detail" hidden>
+            <ul class="detail-list">
+              <li>✓ Akses Jatim Park 1</li>
+              <li>✓ Akses Museum Angkut</li>
+              <li>✓ Berlaku Senin - Jumat</li>
+            </ul>
+          </div>
+        </div>
+        <button class="btn-buy">Pilih</button>
+      </div>
+    </div>
+  </div>
+</section>
+
   </div>
 
 
@@ -126,6 +198,31 @@ import "../styles/global.css";
             p.classList.remove('active');
           }
         });
+      });
+    });
+
+    // Ticket detail toggles
+    const toggles = document.querySelectorAll('.detail-toggle');
+    toggles.forEach(toggle => {
+      toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        const card = toggle.closest('.ticket-content');
+        const accordion = card.querySelector('.accordion-detail');
+        const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+        
+        // close other accordions
+        document.querySelectorAll('.accordion-detail').forEach(acc => {
+          if (acc !== accordion) {
+            acc.hidden = true;
+            acc.closest('.ticket-content').querySelector('.detail-toggle').setAttribute('aria-expanded', 'false');
+            acc.closest('.ticket-content').querySelector('.detail-toggle').textContent = 'Lihat Detail & Termasuk';
+          }
+        });
+
+        // toggle current accordion
+        accordion.hidden = !accordion.hidden;
+        toggle.setAttribute('aria-expanded', !isExpanded);
+        toggle.textContent = !isExpanded ? 'Sembunyikan Detail' : 'Lihat Detail & Termasuk';
       });
     });
   });
@@ -245,6 +342,110 @@ import "../styles/global.css";
     gap: 8px;
   }
 
+  /* Tickets Section */
+  .tickets-section {
+    background: #f9fafb;
+    padding: 32px 16px;
+    margin-top: 24px;
+  }
+
+  .tickets-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .tickets-title {
+    margin: 0 0 24px 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tickets-icon {
+    font-size: 28px;
+  }
+
+  .ticket-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .ticket-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    transition: box-shadow 0.2s;
+  }
+
+  .ticket-card:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+  }
+
+  .ticket-content {
+    flex: 1;
+  }
+
+  .ticket-name {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #0f172a;
+  }
+
+  .ticket-price {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    color: #6b7280;
+  }
+
+  .price-value {
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  .detail-toggle {
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: #0099ff;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+
+  .detail-toggle:hover {
+    color: #0077cc;
+  }
+
+  .btn-buy {
+    background: #16a34a;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .btn-buy:hover {
+    background: #15803d;
+  }
+
   @media (max-width: 768px) {
     .details {
       padding: 16px;
@@ -269,6 +470,59 @@ import "../styles/global.css";
       margin: 0 0 16px 18px;
       font-size: 14px;
     }
+
+    .tickets-section {
+      padding: 24px 12px;
+    }
+
+    .tickets-title {
+      font-size: 20px;
+    }
+
+    .ticket-card {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .accordion-detail {
+      width: 100%;
+    }
+  }
+
+  .accordion-detail {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #e5e7eb;
+    animation: slideDown 0.3s ease-out;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .detail-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .detail-list li {
+    padding: 6px 0;
+    color: #111827;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .detail-list li::before {
+    content: '';
+    display: inline-block;
   }
 </style>
 
