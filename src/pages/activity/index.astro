@@ -1,0 +1,734 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+import "../../styles/global.css";
+
+---
+
+<Layout>
+  <div class="activity-container">
+    <!-- Header -->
+    <div class="activity-header">
+      <h1 class="activity-title">Jatim Park 1 + Museum Tubuh + Museum Angkut Weekday</h1>
+      <p class="activity-price">Dari <span class="price-value">IDR 180.000</span></p>
+      <button class="btn-booking">Booking</button>
+    </div>
+
+    <!-- Stepper -->
+    <div class="stepper">
+      <div class="step active" data-step="1">
+        <div class="step-number">1</div>
+        <div class="step-label">Detail</div>
+      </div>
+      <div class="step-line"></div>
+      <div class="step" data-step="2">
+        <div class="step-number">2</div>
+        <div class="step-label">Tanggal</div>
+      </div>
+      <div class="step-line"></div>
+      <div class="step" data-step="3">
+        <div class="step-number">3</div>
+        <div class="step-label">Waktu</div>
+      </div>
+    </div>
+
+    <div class="steps-container">
+      <!-- Step 1: Detail & Termasuk -->
+      <div class="step-content active" id="step-1">
+        <aside class="sidebar">
+          <div class="sidebar-section">
+            <h3 class="sidebar-title">Detail & Termasuk</h3>
+            <p class="section-desc">Deskripsi</p>
+            <p class="desc-text">Jam operasional: 08.30 - 16.30 WIB<br/>terakhir pemasukan: 15.00 WIB</p>
+
+            <h4 class="section-subtitle">Termasuk</h4>
+            <ul class="includes-list">
+              <li>Tiket Masuk Jatim Park 1</li>
+              <li>Tiket Masuk Museum Tubuh</li>
+              <li>Tiket Masuk Museum Angkut</li>
+              <li>Tiket untuk semua wahana kecuali wahana anak-anak/kegiatan berbayar</li>
+              <li>Hanya berlaku untuk 1 pengunjung</li>
+            </ul>
+
+            <h4 class="section-subtitle">Cara penggunaan</h4>
+            <ul class="usage-list">
+              <li>Tampilkan tiket Ponsek Konter Tiket</li>
+              <li>Tukarkan voucher untuk tiket pelanggan di loket tiket. Jam</li>
+            </ul>
+
+            <a href="#" class="view-more">Lihat Lebih Banyak <span>↓</span></a>
+          </div>
+        </aside>
+
+        <div class="step-actions">
+          <button class="btn-secondary" disabled>Sebelumnya</button>
+          <button class="btn-primary next-step">Selanjutnya</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Calendar -->
+      <div class="step-content flex justify-center" id="step-2">
+       <div id="my-calendar" style="display: flex;flex-direction: row;justify-content: center;"></div>
+        <div class="step-actions">
+          <button class="btn-secondary prev-step">Sebelumnya</button>
+        
+        </div>
+      </div>
+
+      <!-- Step 3: Time Slot -->
+      <div class="step-content" id="step-3">
+        <section class="timeslot-section">
+          <h2 class="timeslot-title">Pilih Slot Waktu</h2>
+          <p class="timeslot-desc" id="selected-date">Tanggal: -</p>
+
+          <div class="timeslots-grid">
+            <button class="timeslot-btn">08:00 - 10:00</button>
+            <button class="timeslot-btn">10:00 - 12:00</button>
+            <button class="timeslot-btn">12:00 - 14:00</button>
+            <button class="timeslot-btn">14:00 - 16:00</button>
+          </div>
+
+          <p class="timeslot-info" id="selected-time">Waktu: -</p>
+        </section>
+
+        <div class="step-actions">
+          <button class="btn-secondary prev-step">Sebelumnya</button>
+          <button class="btn-primary" id="btn-confirm" disabled>Konfirmasi Booking</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+	<script src="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.5/source/jsCalendar.min.js" integrity="sha384-F3Wc9EgweCL3C58eDn9902kdEH6bTDL9iW2JgwQxJYUIeudwhm4Wu9JhTkKJUtIJ" crossorigin="anonymous"></script>
+ 
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.5/source/jsCalendar.min.css" integrity="sha384-CTBW6RKuDwU/TWFl2qLavDqLuZtBzcGxBXY8WvQ0lShXglO/DsUvGkXza+6QTxs0" crossorigin="anonymous">
+<script type="module">
+
+    // Create the calendar
+    var el_calendar = document.getElementById("my-calendar");
+    var myCalendar = jsCalendar.new({
+        target: el_calendar,      
+        zeroFill: true,        
+    });
+    // Limit to only current month
+    myCalendar.min("now");
+
+  document.addEventListener('DOMContentLoaded', () => {
+    let currentStep = 1;
+    let selectedDate = null;
+    let selectedTime = null;
+
+    const steps = document.querySelectorAll('.step');
+    const stepContents = document.querySelectorAll('.step-content');
+
+    // Show step
+    function showStep(step) {
+      stepContents.forEach(content => content.classList.remove('active'));
+      steps.forEach(s => s.classList.remove('active'));
+      
+      document.getElementById(`step-${step}`).classList.add('active');
+      document.querySelector(`[data-step="${step}"]`).classList.add('active');
+      
+      currentStep = step;
+      updateNavigationButtons();
+    }
+   myCalendar.onDateClick((event, date)=>{
+        
+         showStep(3);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Update navigation buttons
+    function updateNavigationButtons() {
+      const prevBtns = document.querySelectorAll('.prev-step');
+      const nextBtns = document.querySelectorAll('.next-step');
+      const confirmBtn = document.getElementById('btn-confirm');
+
+      prevBtns.forEach(btn => {
+        btn.disabled = currentStep === 1;
+      });
+
+      // Enable next button only if date is selected
+      nextBtns.forEach(btn => {
+        if (currentStep === 2) {
+          btn.disabled = !selectedDate;
+        }else{
+            btn.disabled = false;
+        }
+      });
+
+      // Enable confirm button only if time is selected
+      if (confirmBtn) {
+        confirmBtn.disabled = !selectedTime;
+      }
+    }
+
+    // Next step buttons
+    document.querySelectorAll('.next-step').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (currentStep < 3) {
+          showStep(currentStep + 1);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+    });
+
+    // Previous step buttons
+    document.querySelectorAll('.prev-step').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (currentStep > 1) {
+          showStep(currentStep - 1);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+    });
+
+    // Calendar day selection
+    const calendarDays = document.querySelectorAll('.calendar-day.available');
+    calendarDays.forEach(day => {
+      day.addEventListener('click', () => {
+        calendarDays.forEach(d => d.classList.remove('selected'));
+        day.classList.add('selected');
+        selectedDate = day.textContent;
+        updateNavigationButtons();
+      });
+    });
+
+    // Time slot selection
+    const timeslotBtns = document.querySelectorAll('.timeslot-btn');
+    timeslotBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        timeslotBtns.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedTime = btn.textContent;
+        document.getElementById('selected-time').textContent = `Waktu: ${selectedTime}`;
+        updateNavigationButtons();
+      });
+    });
+
+    // Update selected date display
+    document.querySelectorAll('.calendar-day.available').forEach(day => {
+      const originalClick = day.onclick;
+      day.addEventListener('click', () => {
+        document.getElementById('selected-date').textContent = `Tanggal: ${day.textContent} Oktober 2025`;
+      });
+    });
+
+    // Confirm booking
+    document.getElementById('btn-confirm').addEventListener('click', () => {
+      alert(`Booking Confirmed!\nTanggal: ${selectedDate} Oktober 2025\nWaktu: ${selectedTime}`);
+    });
+
+    updateNavigationButtons();
+  });
+</script>
+
+<style>
+ 
+  .activity-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .activity-header {
+    margin-bottom: 32px;
+  }
+
+  .activity-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 8px 0;
+  }
+
+  .activity-price {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0 0 16px 0;
+  }
+
+  .price-value {
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  .btn-booking {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-booking:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+  }
+
+  /* Stepper */
+  .stepper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 32px 0;
+    padding: 0 20px;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  .step-number {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #e5e7eb;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #9ca3af;
+    background: #fff;
+    transition: all 0.3s;
+  }
+
+  .step.active .step-number {
+    background: #0f172a;
+    color: #fff;
+    border-color: #0f172a;
+  }
+
+  .step-label {
+    font-size: 13px;
+    color: #9ca3af;
+    font-weight: 600;
+  }
+
+  .step.active .step-label {
+    color: #0f172a;
+  }
+
+  .step-line {
+    width: 40px;
+    height: 2px;
+    background: #e5e7eb;
+  }
+
+  /* Steps Container */
+  .steps-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .step-content {
+    display: none;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .step-content.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Sidebar (Step 1) */
+  .sidebar {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .sidebar-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .sidebar-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+  }
+
+  .section-desc {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    margin: 0;
+  }
+
+  .desc-text {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .section-subtitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 8px 0 6px 0;
+  }
+
+  .includes-list,
+  .usage-list {
+    margin: 0;
+    padding: 0 0 0 16px;
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.6;
+  }
+
+  .includes-list li,
+  .usage-list li {
+    margin-bottom: 4px;
+  }
+
+  .view-more {
+    color: #0f172a;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 8px;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 2px;
+    transition: border-color 0.2s;
+  }
+
+  .view-more:hover {
+    border-color: #0f172a;
+  }
+
+  /* Calendar Section (Step 2) */
+  .calendar-section {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .calendar-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 16px 0;
+  }
+
+  .calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .calendar-month {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0;
+  }
+
+  .calendar-nav {
+    display: flex;
+    gap: 8px;
+  }
+
+  .calendar-btn {
+    background: #fff;
+    color: #0f172a;
+    border: 1px solid #e5e7eb;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+
+  .calendar-btn:hover {
+    background: #f3f4f6;
+    border-color: #d1d5db;
+  }
+
+  .calendar-legend {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    font-size: 13px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #6b7280;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .dot.available {
+    background: #0f172a;
+  }
+
+  .dot.unavailable {
+    background: #d1d5db;
+  }
+
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+  }
+
+  .day-header {
+    text-align: center;
+    font-weight: 600;
+    font-size: 12px;
+    color: #9ca3af;
+    padding: 8px 0;
+    text-transform: uppercase;
+  }
+
+  .calendar-day {
+    aspect-ratio: 1;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    color: #0f172a;
+    transition: all 0.2s;
+    position: relative;
+  }
+ 
+  .calendar-day.available:hover {
+    border-color: #0f172a;
+    background: #f9fafb;
+  }
+
+  .calendar-day.available::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background: #0f172a;
+    border-radius: 50%;
+  }
+
+  .calendar-day.unavailable {
+    background: #f3f4f6;
+    color: #d1d5db;
+    cursor: not-allowed;
+  }
+
+  .calendar-day.selected {
+    background: #0f172a;
+    color: #fff;
+    border-color: pink;
+  }
+
+  .calendar-day.selected::after {
+    display: none;
+  }
+
+  /* Time Slot Section (Step 3) */
+  .timeslot-section {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .timeslot-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 8px 0;
+  }
+
+  .timeslot-desc {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0 0 20px 0;
+    text-align: center;
+  }
+
+  .timeslots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .timeslot-btn {
+    padding: 12px 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background: #fff;
+    color: #0f172a;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .timeslot-btn:hover {
+    border-color: #0f172a;
+    background: #f9fafb;
+  }
+
+  .timeslot-btn.selected {
+    background: #0f172a;
+    color: #fff;
+    border-color: #0f172a;
+  }
+
+  .timeslot-info {
+    font-size: 14px;
+    color: #6b7280;
+    text-align: center;
+    margin: 0;
+  }
+
+  /* Step Actions */
+  .step-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+  }
+
+  .btn-primary {
+    background: #0f172a;
+    color: #fff;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background: #1f2937;
+  }
+
+  .btn-primary:disabled {
+    background: #e5e7eb;
+    cursor: not-allowed;
+  }
+
+  .btn-secondary {
+    background: #fff;
+    color: #0f172a;
+    border: 1px solid #e5e7eb;
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    background: #f9fafb;
+    border-color: #d1d5db;
+  }
+
+  .btn-secondary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    .activity-content {
+      grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+      order: 2;
+    }
+
+    .activity-main {
+      order: 1;
+    }
+
+    .activity-title {
+      font-size: 18px;
+    }
+
+    .calendar-grid {
+      gap: 6px;
+    }
+
+    .calendar-day {
+      font-size: 12px;
+    }
+
+    .stepper {
+      gap: 8px;
+      margin: 24px 0;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      font-size: 12px;
+    }
+
+    .step-label {
+      font-size: 11px;
+    }
+
+    .step-line {
+      width: 20px;
+    }
+
+    .timeslots-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .step-actions {
+      flex-direction: column;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      width: 100%;
+    }
+  }
+</style>

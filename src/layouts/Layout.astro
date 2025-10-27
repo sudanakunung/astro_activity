@@ -40,6 +40,11 @@
             </div>
         </header>
 
+        <!-- Floating WhatsApp Button -->
+        <a href="https://wa.me/62812345678?text=Halo%20saya%20ingin%20informasi%20tiket" class="whatsapp-floating" target="_blank" rel="noopener" aria-label="Chat WhatsApp">
+         <img src="/whatsapp-3.svg" alt="">
+        </a>
+
         <main class="container mx-auto  py-8 px-4">
             <slot />
         </main>
@@ -108,6 +113,35 @@
         cursor: pointer;
     }
 
+    /* Floating WhatsApp Button */
+    .whatsapp-floating {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+       
+        color: #fff;
+        border-radius: 50%;
+        text-decoration: none;
+        border: none;
+      
+        transition: all 0.3s ease;
+        z-index: 50;
+    }
+
+    .whatsapp-floating:hover {
+      
+        transform: scale(1.1);
+    }
+
+    .whatsapp-floating:active {
+        transform: scale(0.95);
+    }
+
     .cart {
         display: inline-flex;
         align-items: center;
@@ -140,5 +174,17 @@
         .actions { gap: 8px; }
         .logo { height: 30px; }
         .select-wrap select { padding: 5px 8px; font-size: 13px; }
+
+        .whatsapp-floating {
+            bottom: 16px;
+            right: 16px;
+            width: 56px;
+            height: 56px;
+        }
+
+        .whatsapp-floating svg {
+            width: 28px;
+            height: 28px;
+        }
     }
 </style>

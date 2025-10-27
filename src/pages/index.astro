@@ -91,7 +91,7 @@ import "../styles/global.css";
             </ul>
           </div>
         </div>
-        <button class="btn-buy">Pilih</button>
+        <a href="/activity" class="btn-buy">Pilih</a>
       </div>
 
       <div class="ticket-card">
@@ -279,8 +279,8 @@ import "../styles/global.css";
   }
 
   .tab.active {
-    color: #16a34a;
-    border-bottom-color: #16a34a;
+    color: #0f172a;
+    border-bottom-color: #0f172a;
     background: transparent;
   }
 
@@ -289,7 +289,7 @@ import "../styles/global.css";
     font-weight: 700;
     margin: 0 0 16px 0;
     color: #0f172a;
-    border-bottom: 2px solid #16a34a;
+    border-bottom: 2px solid #0f172a;
     padding-bottom: 8px;
     display: inline-block;
   }
@@ -313,9 +313,9 @@ import "../styles/global.css";
   }
 
   .highlight {
-    background: #f3f4f6;
+    background: #f9fafb;
     padding: 12px 16px;
-    border-left: 4px solid #16a34a;
+    border-left: 4px solid #0f172a;
     margin: 16px 0;
     font-size: 14px;
     line-height: 1.6;
@@ -331,22 +331,26 @@ import "../styles/global.css";
     align-items: center;
     gap: 4px;
     margin-top: 12px;
-    color: #16a34a;
+    color: #0f172a;
     text-decoration: none;
     font-weight: 600;
     font-size: 14px;
-    transition: gap 0.2s;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 2px;
+    transition: all 0.2s;
   }
 
   .more-link:hover {
     gap: 8px;
+    border-bottom-color: #0f172a;
   }
 
   /* Tickets Section */
   .tickets-section {
-    background: #f9fafb;
+    background: #fff;
     padding: 32px 16px;
     margin-top: 24px;
+    border-top: 1px solid #e5e7eb;
   }
 
   .tickets-container {
@@ -383,11 +387,12 @@ import "../styles/global.css";
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    transition: box-shadow 0.2s;
+    transition: all 0.2s;
   }
 
   .ticket-card:hover {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    border-color: #d1d5db;
   }
 
   .ticket-content {
@@ -416,20 +421,22 @@ import "../styles/global.css";
     background: transparent;
     border: none;
     padding: 0;
-    color: #0099ff;
+    color: #0f172a;
     font-size: 13px;
     font-weight: 600;
     text-decoration: underline;
     cursor: pointer;
     transition: color 0.2s;
+    opacity: 0.7;
   }
 
   .detail-toggle:hover {
-    color: #0077cc;
+    opacity: 1;
+    color: #000;
   }
 
   .btn-buy {
-    background: #16a34a;
+    background: #0f172a;
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -437,13 +444,18 @@ import "../styles/global.css";
     font-weight: 600;
     font-size: 14px;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.2s;
     white-space: nowrap;
     flex-shrink: 0;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
   }
 
   .btn-buy:hover {
-    background: #15803d;
+    background: #1f2937;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
   @media (max-width: 768px) {
@@ -482,6 +494,10 @@ import "../styles/global.css";
     .ticket-card {
       flex-direction: column;
       align-items: flex-start;
+    }
+
+    .btn-buy {
+      width: 100%;
     }
 
     .accordion-detail {
