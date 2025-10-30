@@ -1,0 +1,276 @@
+---
+// filepath: d:\sudana\activity\src\pages\activity\checkout\index.astro
+import Layout from '../../../layouts/Layout.astro';
+import "../../../styles/global.css";
+---
+
+<Layout>
+  <div class="checkout-container">
+    <h1 class="checkout-title">Checkout</h1>
+    <div class="checkout-grid">
+      <!-- Left: Form Kontak -->
+      <form class="checkout-form" id="checkoutForm">
+        <h2 class="form-title">Kontak Informasi</h2>
+        <div class="form-group">
+          <label for="email">Email*</label>
+          <input type="email" id="email" name="email" required placeholder="Email*" />
+          <small class="form-hint">Harap berikan email yang valid untuk menerima e-tiket Anda.</small>
+        </div>
+        <div class="form-group">
+          <label for="name">Nama*</label>
+          <input type="text" id="name" name="name" required placeholder="Nama*" />
+        </div>
+        <div class="form-group phone-group">
+          <label for="phone">Nomor Telepon*</label>
+          <div class="phone-input">
+            <span class="country-code">+62</span>
+            <input type="tel" id="phone" name="phone" required placeholder="812-345-678" pattern="[0-9]{9,13}" />
+          </div>
+        </div>
+        <div class="form-group terms-group">
+          <input type="checkbox" id="terms" name="terms" required />
+          <label for="terms">
+            Dengan melakukan pembelian ini, saya menyatakan bahwa saya telah membaca, memahami, dan menyetujui
+            <a href="#" target="_blank" class="terms-link">Persyaratan dan Ketentuan berikut</a>.
+          </label>
+        </div>
+      </form>
+      <!-- Right: Keranjang -->
+      <aside class="checkout-cart">
+        <h2 class="cart-title">Keranjang Saya (1)</h2>
+        <div class="cart-item">
+          <div class="cart-item-title">Jawa Timur Park 1</div>
+          <div class="cart-item-desc">Jatim Park 1 + Museum Tubuh + Museum Angkut Weekend (Per Pax)</div>
+          <div class="cart-item-detail">1 X Per Pax</div>
+          <div class="cart-item-date">31 Oct 2025, 08.30–16.30</div>
+        </div>
+        <div class="cart-promo">
+          <label for="promo">Masukkan Kode Promo</label>
+          <div class="promo-row">
+            <input type="text" id="promo" name="promo" placeholder="Kode Promo" />
+            <button type="button" class="btn-promo">Terapkan</button>
+          </div>
+        </div>
+        <div class="cart-total-row">
+          <span class="cart-total-label">Total</span>
+          <span class="cart-total-value">IDR 200,000</span>
+        </div>
+        <div class="cart-actions">
+          <button type="button" class="btn-back">Kembali</button>
+          <button type="submit" form="checkoutForm" class="btn-pay">Lanjutkan Untuk Pembayaran</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</Layout>
+
+<style>
+.checkout-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 8px;
+}
+.checkout-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #0f172a;
+}
+.checkout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: stretch;
+}
+.checkout-form,
+.checkout-cart {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 32px 24px;
+  min-width: 0;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  height: 100%;
+}
+.form-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 18px;
+  color: #0f172a;
+}
+.form-group {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+}
+.form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #374151;
+}
+.form-group input[type="email"],
+.form-group input[type="text"],
+.form-group input[type="tel"] {
+  padding: 10px 12px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 15px;
+  background: #fff;
+  color: #0f172a;
+  transition: border-color 0.2s;
+}
+.form-group input:focus {
+  border-color: #0f172a;
+  outline: none;
+}
+.form-hint {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 4px;
+}
+.phone-group .phone-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.country-code {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 14px;
+  color: #374151;
+}
+.terms-group {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+.terms-link {
+  color: #0f172a;
+  text-decoration: underline;
+  margin-left: 2px;
+}
+.checkout-cart {
+  max-width: 100%;
+}
+.cart-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #0f172a;
+}
+.cart-item {
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+.cart-item-title {
+  font-weight: 700;
+  font-size: 15px;
+  color: #0f172a;
+}
+.cart-item-desc {
+  font-size: 13px;
+  color: #374151;
+  margin: 2px 0 4px 0;
+}
+.cart-item-detail,
+.cart-item-date {
+  font-size: 13px;
+  color: #6b7280;
+}
+.cart-promo label {
+  font-size: 13px;
+  color: #374151;
+  margin-bottom: 4px;
+  display: block;
+}
+.promo-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+.promo-row input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 14px;
+}
+.btn-promo {
+  background: #fff;
+  color: #0f172a;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.btn-promo:hover {
+  background: #f3f4f6;
+  border-color: #0f172a;
+}
+.cart-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 12px 0;
+}
+.cart-total-label {
+  color: #374151;
+}
+.cart-total-value {
+  color: #0f172a;
+}
+.cart-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+.btn-back {
+  background: #fff;
+  color: #0f172a;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.btn-back:hover {
+  background: #f3f4f6;
+  border-color: #0f172a;
+}
+.btn-pay {
+  background: #0f172a;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-pay:hover {
+  background: #1f2937;
+}
+@media (max-width: 900px) {
+  .checkout-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .checkout-cart {
+    max-width: 100%;
+    min-width: 0;
+  }
+}
+</style>
