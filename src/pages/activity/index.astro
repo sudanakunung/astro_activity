@@ -82,10 +82,10 @@ import "../../styles/global.css";
           <p class="timeslot-desc" id="selected-date">Tanggal: -</p>
 
           <div class="timeslots-grid">
-            <button class="timeslot-btn">08:00 - 10:00</button>
-            <button class="timeslot-btn">10:00 - 12:00</button>
-            <button class="timeslot-btn">12:00 - 14:00</button>
-            <button class="timeslot-btn">14:00 - 16:00</button>
+            <button class="timeslot-btn" type="button">08:00 - 10:00</button>
+            <button class="timeslot-btn" type="button">10:00 - 12:00</button>
+            <button class="timeslot-btn" type="button">12:00 - 14:00</button>
+            <button class="timeslot-btn" type="button">14:00 - 16:00</button>
           </div>
 
           <p class="timeslot-info" id="selected-time">Waktu: -</p>
@@ -93,7 +93,29 @@ import "../../styles/global.css";
 
         <div class="step-actions">
           <button class="btn-secondary prev-step">Sebelumnya</button>
-          <button class="btn-primary" id="btn-confirm" disabled>Konfirmasi Booking</button>
+          <!-- <button class="btn-primary" id="btn-confirm" disabled>Konfirmasi Booking</button> -->
+        </div>
+      </div>
+
+      <!-- Step 4: Pax Selection -->
+      <div class="step-content" id="step-4">
+        <section class="pax-section">
+          <h2 class="pax-title">Pilih Jumlah Pengunjung</h2>
+          <div class="pax-grid">
+            <button class="pax-btn" data-pax="1">1</button>
+            <button class="pax-btn" data-pax="2">2</button>
+            <button class="pax-btn" data-pax="3">3</button>
+            <button class="pax-btn" data-pax="4">4</button>
+          </div>
+          <!-- <div class="pax-manual">
+            <label for="pax-manual-input" class="pax-manual-label">Atau input manual:</label>
+            <input type="number" min="1" max="99" id="pax-manual-input" class="pax-manual-input" placeholder="Jumlah lain..." />
+          </div> -->
+          <p class="pax-info" id="selected-pax">Jumlah: -</p>
+        </section>
+        <div class="step-actions">
+          <button class="btn-secondary prev-step">Sebelumnya</button>
+          <button class="btn-primary" id="btn-confirm"  disabled>Konfirmasi Booking</button>
         </div>
       </div>
     </div>
@@ -117,6 +139,7 @@ import "../../styles/global.css";
     let currentStep = 1;
     let selectedDate = null;
     let selectedTime = null;
+    let selectedPax = null;
 
     const steps = document.querySelectorAll('.step');
     const stepContents = document.querySelectorAll('.step-content');
@@ -162,7 +185,9 @@ import "../../styles/global.css";
         confirmBtn.disabled = !selectedTime;
       }
     }
-
+    document.getElementById('btn-confirm').onclick=async ()=>{
+      console.log(await checkout());
+    }
     // Next step buttons
     document.querySelectorAll('.next-step').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -189,6 +214,7 @@ import "../../styles/global.css";
       day.addEventListener('click', () => {
         calendarDays.forEach(d => d.classList.remove('selected'));
         day.classList.add('selected');
+        showStep(currentStep - 3);
         selectedDate = day.textContent;
         updateNavigationButtons();
       });
@@ -198,14 +224,56 @@ import "../../styles/global.css";
     const timeslotBtns = document.querySelectorAll('.timeslot-btn');
     timeslotBtns.forEach(btn => {
       btn.addEventListener('click', () => {
-        timeslotBtns.forEach(b => b.classList.remove('selected'));
+        document.querySelectorAll('.timeslot-btn').forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
         selectedTime = btn.textContent;
         document.getElementById('selected-time').textContent = `Waktu: ${selectedTime}`;
+        showStep(4); // <-- ini yang membuat step 4 aktif!
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         updateNavigationButtons();
       });
     });
 
+    // Pax selection
+    const paxBtns = document.querySelectorAll('.pax-btn');
+    const paxInput = document.getElementById('pax-manual-input');
+    const selectedPaxInfo = document.getElementById('selected-pax');
+    const btnConfirm = document.getElementById('btn-confirm');
+
+    paxBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        paxBtns.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedPax = btn.getAttribute('data-pax');
+        selectedPaxInfo.textContent = `Jumlah: ${selectedPax}`;
+        btnConfirm.disabled = false;
+        paxInput.value = ""; // clear manual input
+      });
+    });
+
+    // Manual input handler
+    paxInput.addEventListener('input', () => {
+      paxBtns.forEach(b => b.classList.remove('selected'));
+      let val = parseInt(paxInput.value, 10);
+      if (val > 0 && val <= 99) {
+        selectedPax = val;
+        selectedPaxInfo.textContent = `Jumlah: ${selectedPax}`;
+        btnConfirm.disabled = false;
+      } else {
+        selectedPaxInfo.textContent = "Jumlah: -";
+        btnConfirm.disabled = true;
+      }
+    });
+    async function checkout (){
+      const response =  await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ /* data pembayaran */ })
+      })
+      .then(res => res.json())
+     
+      console.log(response);
+    }
     // Update selected date display
     document.querySelectorAll('.calendar-day.available').forEach(day => {
       const originalClick = day.onclick;
@@ -215,8 +283,8 @@ import "../../styles/global.css";
     });
 
     // Confirm booking
-    document.getElementById('btn-confirm').addEventListener('click', () => {
-      alert(`Booking Confirmed!\nTanggal: ${selectedDate} Oktober 2025\nWaktu: ${selectedTime}`);
+    document.getElementById('btn-confirm')?.addEventListener('click', () => {
+      alert(`Booking Confirmed!\nTanggal: ${selectedDate}\nWaktu: ${selectedTime}\nJumlah: ${selectedPax}`);
     });
 
     updateNavigationButtons();
@@ -619,6 +687,84 @@ import "../../styles/global.css";
   }
 
   .timeslot-info {
+    font-size: 14px;
+    color: #6b7280;
+    text-align: center;
+    margin: 0;
+  }
+
+  /* Pax Section (Step 4) */
+  .pax-section {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .pax-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 16px 0;
+  }
+
+  .pax-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .pax-btn {
+    padding: 12px 0;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background: #fff;
+    color: #0f172a;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .pax-btn:hover {
+    border-color: #0f172a;
+    background: #f9fafb;
+  }
+
+  .pax-btn.selected {
+    background: #0f172a;
+    color: #fff;
+    border-color: #0f172a;
+  }
+
+  .pax-manual {
+    margin: 16px 0 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pax-manual-label {
+    font-size: 13px;
+    color: #6b7280;
+  }
+  .pax-manual-input {
+    width: 80px;
+    padding: 8px 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 14px;
+    background: #fff;
+    color: #0f172a;
+    transition: border-color 0.2s;
+  }
+  .pax-manual-input:focus {
+    border-color: #0f172a;
+    outline: none;
+  }
+
+  .pax-info {
     font-size: 14px;
     color: #6b7280;
     text-align: center;
