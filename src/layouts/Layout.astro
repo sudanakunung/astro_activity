@@ -8,38 +8,302 @@
         <!-- Splide CSS dari CDN -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css" />
         <link rel="stylesheet" href="/slick-1.8.1/slick/slick.css" />
-        
+        <link rel="stylesheet" href="/source/jsCalendar.min.css" />
+<script src="//unpkg.com/alpinejs" defer></script>
         <title>Astro Basics</title>
     </head>
     <body>
-        <header class="site-header">
-            <div class="container">
-                <div class="brand">
-                    <!-- Ganti src dengan path logo yang benar -->
-                    <a href="/" class="logo-link" aria-label="Home">
-                        <img src="/favicon.svg" alt="JTP Group" class="logo" />
-                    </a>
-                </div>
-                <div class="actions">
-                    <div class="select-wrap">
-                        <label for="lang" class="sr-only">Language</label>
-                        <select id="lang" name="lang" aria-label="Language">
-                            <option>ID</option>
-                            <option>EN</option>
-                        </select>
-                    </div>
+<header id="navbar" class="sticky top-0 w-full z-50 transition-all duration-300 bg-white text-black overflow-visible">
+  <!-- Top Section: Language Selector & Logo -->
+  <div class="flex items-center px-6 py-1 justify-between w-full relative">
+    <!-- Language Dropdown (hidden on mobile, shown on md+) -->
+    <label for="languageSelect" class="sr-only">Language Selection</label>
+    <div class="hidden md:block">
+      <select id="languageSelect" class="bg-transparent text-white focus:outline-none text-lg">
+        <option value="en" class="text-black">English</option>
+        <option value="ko" class="text-black">한국어</option>
+        <option value="zh" class="text-black">中文</option>
+      </select>
+    </div>
+    <!-- Logo: centered using flex grow -->
+    <div class="flex-1 flex justify-center">
+  
+    </div>
+    <!-- Member Button (hidden on mobile, shown on md+) -->
+    <div class="hidden md:flex items-center justify-end w-32">
+    
+    </div>
+  </div>
 
-                    <a href="/cart" class="cart" aria-label="Cart">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
-                            <path d="M6 6h15l-1.5 9h-11L6 6z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <circle cx="10" cy="20" r="1" fill="currentColor"/>
-                            <circle cx="18" cy="20" r="1" fill="currentColor"/>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-        </header>
+  <!-- Bottom Section: Main Navigation & Reserve Button -->
+  <div class="flex justify-between items-center px-6 py-3 border-b border-white/50">
+    <!-- Hamburger for Mobile -->
+    <button id="hamburger" aria-label="Open Mobile Menu">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
 
+    <!-- Desktop Navigation Menu -->
+    <nav class="hidden xl:flex md:space-x-6 xl:space-x-8 text-base font-normal w-full justify-center overflow-visible relative">
+      <a href={`/en/offers`} class="uppercase">Offers</a>
+      <a href={`/en/villas`} class="uppercase">Our Villas</a>
+      <a href={`/en/spa-wellness`} class="uppercase">Spa & Wellness</a>
+      <!-- Dining Dropdown Trigger -->
+      <div id="dining-trigger" class="relative group">
+      <a href={`/en/dining`} class="inline-block px-2 uppercase">Dining</a>
+      </div>
+      <a href={`/en/experiences`} class="uppercase">Unique Experiences</a>
+      <a href={`/en/wedding-events`} class="uppercase">Wedding & Events</a>
+      <a href={`/en/our-story`} class="uppercase">Our Story</a>
+      <!-- More Dropdown Trigger -->
+      <!-- <div id="more-trigger" class="relative group">
+      <a href="#" class="inline-block px-2 uppercase">More</a>
+      </div> -->
+    </nav>
+
+    <!-- Reserve Button -->
+    <a
+      href="https://redirect.fastbooking.com/DIRECTORY/dispoprice.phtml?HotelName=ASIAIDHTLKamandaluU1"
+      id="reserveBtn"
+      class="bg-white text-black px-4 py-2 md:px-6 md:py-3 text-xs md:text-sm font-title tracking-widest transition-colors duration-300 border border-white whitespace-nowrap"
+    >
+      <span class="hidden sm:inline">RESERVE</span>
+      <span class="inline sm:hidden">RESERVE</span>
+    </a>
+  </div>
+
+  <!-- Off-Canvas Mobile Menu -->
+  <div
+    id="offcanvas"
+    class="fixed top-0 left-0 h-full w-64 bg-white text-black shadow-lg transform -translate-x-full transition-transform duration-300 z-40 flex flex-col"
+  >
+    <!-- Offcanvas Top: Language Selector (mobile only) -->
+    <label for="languageSelectOffcanvas" class="sr-only">Language Selection offcanvas</label>
+    <div class="relative flex justify-end p-4 border-b border-gray-200">
+      <select
+  id="languageSelectOffcanvas"
+  class="absolute left-4 top-1/2 -translate-y-1/2 md:hidden block bg-transparent text-black focus:outline-none text-sm"
+>
+        <option value="en" class="text-black">English</option>
+        <option value="ko" class="text-black">한국어</option>
+        <option value="zh" class="text-black">中文</option>
+      </select>
+      <button id="closeOffcanvas" aria-label="Close menu" class="ml-2">
+        <svg class="w-6 h-6 text-black hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <!-- Offcanvas Navigation Links -->
+    <nav class="flex-1 px-6 pb-6 mt-6 space-y-4 overflow-y-auto font-normal">
+      <a href={`/en/offers`} class="block text-xl">Offers</a>
+      <a href={`/en/villas`} class="block text-xl">Our Villas</a>
+      <a href={`/en/spa-wellness`} class="block text-xl">Spa & Wellness</a>
+      <!-- Dining Dropdown (Mobile) -->
+      <div>
+        <button aria-label="Dining Dropdown" id="dining-mobile-toggle" class="block text-xl w-full text-left flex items-center gap-1 justify-between">
+          <span class="flex items-center">
+            Dining
+            <svg class="w-4 h-4 ml-1 inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </span>
+        </button>
+        <div id="dining-mobile-dropdown" class="pl-4 space-y-2 hidden mt-3">
+       
+        </div>
+      </div>
+      <a href={`/en/experiences`} class="block text-xl">Unique Experiences</a>
+      <a href={`/en/wedding-events`} class="block text-xl">Wedding & Events</a>
+      <a href={`/en/our-story`} class="block text-xl">Our Story</a>
+      <hr class="my-6" />
+      <a href={`/en/member`} class="block text-xl">Member</a>
+      <!-- More Dropdown (Mobile) -->
+      <!-- <div>
+        <button aria-label="More Dropdown" id="more-mobile-toggle" class="block text-xl w-full text-left flex items-center gap-1 justify-between">
+          <span class="flex items-center">
+            More
+            <svg class="w-4 h-4 ml-1 inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </span>
+        </button>
+        <div id="more-mobile-dropdown" class="pl-4 space-y-2 hidden mt-3">
+          <a href="#" class="block text-xl">Member</a>
+          <a href="#" class="block text-xl">Contact</a>
+        </div>
+      </div> -->
+    </nav>
+  </div>
+
+  <!-- Desktop Dining Dropdown -->
+  <div
+    id="dining-dropdown"
+    class="hidden absolute left-0 right-0 top-[100%] bg-white text-black z-40 shadow-md transition-all duration-200 opacity-0 group-hover:opacity-100"
+  >
+    <div class="max-w-screen-xl mx-auto px-2 flex justify-center space-x-6 py-3 font-normal text-xl">
+    
+    </div>
+  </div>
+
+  <!-- Desktop More Dropdown -->
+  <div
+    id="more-dropdown"
+    class="hidden absolute left-0 right-0 top-[100%] bg-white text-black z-40 shadow-md transition-all duration-200 opacity-0 group-hover:opacity-100"
+  >
+    <div class="max-w-screen-xl mx-auto px-2 flex justify-center space-x-6 py-3 font-normal text-xl">
+      <a href="#" class="hover:underline uppercase text-base">Member</a>
+      <a href="#" class="hover:underline uppercase text-base">Contact</a>
+    </div>
+  </div>
+<script is:inline src="/source/jsCalendar.min.js"></script>
+  <script is:inline>
+    function updateDropdownPosition(element, dropdown) {
+      const navRect = element.getBoundingClientRect();
+      dropdown.style.top = navRect.bottom + 'px';
+    }
+  
+    document.addEventListener("DOMContentLoaded", () => {
+      const navbar = document.querySelector("#navbar");
+      const dropdown = document.querySelector("#dining-dropdown");
+      const trigger = document.querySelector("#dining-trigger");
+      const moreDropdown = document.querySelector("#more-dropdown");
+      const moreTrigger = document.querySelector("#more-trigger");
+      const hamburger = document.getElementById("hamburger");
+      const offcanvas = document.getElementById("offcanvas");
+      const closeBtn = document.getElementById("closeOffcanvas");
+  
+      const diningMobileToggle = document.getElementById("dining-mobile-toggle");
+      const diningMobileDropdown = document.getElementById("dining-mobile-dropdown");
+      const moreMobileToggle = document.getElementById("more-mobile-toggle");
+      const moreMobileDropdown = document.getElementById("more-mobile-dropdown");
+  
+
+  
+      // Hamburger toggle
+      hamburger?.addEventListener("click", () => {
+        offcanvas?.classList.toggle("-translate-x-full");
+      });
+      closeBtn?.addEventListener("click", () => {
+        offcanvas?.classList.add("-translate-x-full");
+      });
+  
+      // Desktop dropdown: Dining
+      trigger?.addEventListener("mouseenter", () => {
+        if (!dropdown) return;
+        updateDropdownPosition(navbar, dropdown);
+        dropdown.classList.remove("hidden", "opacity-0");
+        dropdown.classList.add("opacity-100", "block");
+      });
+      trigger?.addEventListener("mouseleave", () => {
+        setTimeout(() => {
+          if (!dropdown?.matches(":hover")) {
+            dropdown.classList.add("opacity-0", "hidden");
+            dropdown.classList.remove("opacity-100");
+          }
+        }, 100);
+      });
+      dropdown?.addEventListener("mouseenter", () => {
+        dropdown.classList.remove("hidden", "opacity-0");
+        dropdown.classList.add("opacity-100");
+      });
+      dropdown?.addEventListener("mouseleave", () => {
+        dropdown.classList.add("opacity-0", "hidden");
+        dropdown.classList.remove("opacity-100");
+      });
+  
+      // Desktop dropdown: More
+      moreTrigger?.addEventListener("mouseenter", () => {
+        if (!moreDropdown) return;
+        updateDropdownPosition(navbar, moreDropdown);
+        moreDropdown.classList.remove("hidden", "opacity-0");
+        moreDropdown.classList.add("opacity-100", "block");
+      });
+      moreTrigger?.addEventListener("mouseleave", () => {
+        setTimeout(() => {
+          if (!moreDropdown?.matches(":hover")) {
+            moreDropdown.classList.add("opacity-0", "hidden");
+            moreDropdown.classList.remove("opacity-100");
+          }
+        }, 100);
+      });
+      moreDropdown?.addEventListener("mouseenter", () => {
+        moreDropdown.classList.remove("hidden", "opacity-0");
+        moreDropdown.classList.add("opacity-100");
+      });
+      moreDropdown?.addEventListener("mouseleave", () => {
+        moreDropdown.classList.add("opacity-0", "hidden");
+        moreDropdown.classList.remove("opacity-100");
+      });
+  
+      // Mobile dropdowns
+      diningMobileToggle?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        diningMobileDropdown?.classList.toggle("hidden");
+      });
+      moreMobileToggle?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        moreMobileDropdown?.classList.toggle("hidden");
+      });
+  
+      // Close offcanvas if a link is clicked (except dropdown toggles)
+      const offcanvasItems = offcanvas?.querySelectorAll("a, button") || [];
+      offcanvasItems.forEach((item) => {
+        item.addEventListener("click", (e) => {
+          if (
+            e.target.closest("#dining-mobile-toggle") ||
+            e.target.closest("#dining-mobile-dropdown") ||
+            e.target.closest("#more-mobile-toggle") ||
+            e.target.closest("#more-mobile-dropdown")
+          ) return;
+          offcanvas.classList.add("-translate-x-full");
+        });
+      });
+  
+      // Language selector syncing
+      const selectDesktop = document.getElementById('languageSelect');
+      const selectOffcanvas = document.getElementById('languageSelectOffcanvas');
+      const currentPath = window.location.pathname;
+      const pathParts = currentPath.split('/');
+      const currentLang = pathParts[1];
+      const lang = ['en', 'ko', 'zh'].includes(currentLang) ? currentLang : 'en';
+  
+      if (selectDesktop) selectDesktop.value = lang;
+      if (selectOffcanvas) selectOffcanvas.value = lang;
+  
+      const handleLangChange = (selectedLang) => {
+        const newPath = currentPath.replace(/^\/(en|ko|zh)/, `/${selectedLang}`);
+        const finalPath = ['en', 'ko', 'zh'].includes(currentLang)
+          ? newPath
+          : `/${selectedLang}${currentPath}`;
+        window.location.href = finalPath;
+      };
+  
+      selectDesktop?.addEventListener('change', (e) => {
+        if (selectOffcanvas) selectOffcanvas.value = e.target.value;
+        handleLangChange(e.target.value);
+      });
+  
+      selectOffcanvas?.addEventListener('change', (e) => {
+        if (selectDesktop) selectDesktop.value = e.target.value;
+        handleLangChange(e.target.value);
+      });
+    });
+  
+    // Close offcanvas when clicking outside of it
+    document.addEventListener("click", (e) => {
+      const offcanvas = document.getElementById("offcanvas");
+      const hamburger = document.getElementById("hamburger");
+      if (!offcanvas || !hamburger) return;
+      const isClickInside = offcanvas.contains(e.target) || hamburger.contains(e.target);
+      if (!isClickInside && !offcanvas.classList.contains("-translate-x-full")) {
+        offcanvas.classList.add("-translate-x-full");
+      }
+    });
+  </script>
+  
+</header>
         <!-- Floating WhatsApp Button -->
         <a href="https://wa.me/62812345678?text=Halo%20saya%20ingin%20informasi%20tiket" class="whatsapp-floating" target="_blank" rel="noopener" aria-label="Chat WhatsApp">
          <img src="/whatsapp-3.svg" alt="">

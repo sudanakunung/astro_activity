@@ -6,7 +6,7 @@ import "../../styles/global.css";
 ---
 
 <Layout>
-  <div class="activity-container">
+  <div class="activity-container" x-data="bookingFormData()" x-init="">
     <!-- Header -->
     <div class="activity-header">
       <h1 class="activity-title">Jatim Park 1 + Museum Tubuh + Museum Angkut Weekday</h1>
@@ -18,17 +18,17 @@ import "../../styles/global.css";
     <div class="stepper">
       <div class="step active" data-step="1">
         <div class="step-number">1</div>
-        <div class="step-label">Detail</div>
+        <div class="step-label">Date time</div>
       </div>
       <div class="step-line"></div>
       <div class="step" data-step="2">
         <div class="step-number">2</div>
-        <div class="step-label">Tanggal</div>
+        <div class="step-label">Menu</div>
       </div>
       <div class="step-line"></div>
       <div class="step" data-step="3">
         <div class="step-number">3</div>
-        <div class="step-label">Waktu</div>
+        <div class="step-label">Confirm</div>
       </div>
     </div>
 
@@ -37,26 +37,14 @@ import "../../styles/global.css";
       <div class="step-content active" id="step-1">
         <aside class="sidebar">
           <div class="sidebar-section">
-            <h3 class="sidebar-title">Detail & Termasuk</h3>
-            <p class="section-desc">Deskripsi</p>
-            <p class="desc-text">Jam operasional: 08.30 - 16.30 WIB<br/>terakhir pemasukan: 15.00 WIB</p>
-
-            <h4 class="section-subtitle">Termasuk</h4>
-            <ul class="includes-list">
-              <li>Tiket Masuk Jatim Park 1</li>
-              <li>Tiket Masuk Museum Tubuh</li>
-              <li>Tiket Masuk Museum Angkut</li>
-              <li>Tiket untuk semua wahana kecuali wahana anak-anak/kegiatan berbayar</li>
-              <li>Hanya berlaku untuk 1 pengunjung</li>
-            </ul>
-
-            <h4 class="section-subtitle">Cara penggunaan</h4>
-            <ul class="usage-list">
-              <li>Tampilkan tiket Ponsek Konter Tiket</li>
-              <li>Tukarkan voucher untuk tiket pelanggan di loket tiket. Jam</li>
-            </ul>
-
-            <a href="#" class="view-more">Lihat Lebih Banyak <span>↓</span></a>
+             <div id="my-calendar" style="display: flex;flex-direction: row;justify-content: center;"></div>
+               <div class="timeslots-grid" id="timeslots-grid">
+                <template x-for="time in time_list" :key="time">
+                  <button class="timeslot-btn" @click="selectedTime = time; document.getElementById('selected-time').textContent = `Waktu: ${time}`">
+                    <span class="timeslot-label"></span>
+                  </button>
+                </template>
+          </div>
           </div>
         </aside>
 
@@ -68,10 +56,30 @@ import "../../styles/global.css";
 
       <!-- Step 2: Calendar -->
       <div class="step-content flex justify-center" id="step-2">
-       <div id="my-calendar" style="display: flex;flex-direction: row;justify-content: center;"></div>
+        <!-- buat pilihan menu dengan checkbox -->
+        <div class="menu-options">
+          <h2 class="menu-title">Pilih Menu Tambahan</h2>
+          <div class="flex flex-col space-y-2">
+            <label class="menu-item">
+              <input type="radio" name="menu-option" class="menu-radio" value="meal" />
+              <span class="menu-label">Paket Makan Siang (+IDR 50,000)</span>
+            </label>
+            <label class="menu-item">
+              <input type="radio" name="menu-option" class="menu-radio" value="guide" />
+              <span class="menu-label">Pemandu Wisata (+IDR 75,000)</span>
+            </label>
+            <label class="menu-item">
+              <input type="radio" name="menu-option" class="menu-radio" value="transport" />
+              <span class="menu-label">Transportasi Antar Jemput (+IDR 100,000)</span>
+            </label>
+          </div>
+        </div>
+
+
+
         <div class="step-actions">
           <button class="btn-secondary prev-step">Sebelumnya</button>
-        
+            <button class="btn-primary next-step">Selanjutnya</button>
         </div>
       </div>
 
@@ -80,13 +88,6 @@ import "../../styles/global.css";
         <section class="timeslot-section">
           <h2 class="timeslot-title">Pilih Slot Waktu</h2>
           <p class="timeslot-desc" id="selected-date">Tanggal: -</p>
-
-          <div class="timeslots-grid">
-            <button class="timeslot-btn" type="button">08:00 - 10:00</button>
-            <button class="timeslot-btn" type="button">10:00 - 12:00</button>
-            <button class="timeslot-btn" type="button">12:00 - 14:00</button>
-            <button class="timeslot-btn" type="button">14:00 - 16:00</button>
-          </div>
 
           <p class="timeslot-info" id="selected-time">Waktu: -</p>
         </section>
@@ -120,176 +121,207 @@ import "../../styles/global.css";
       </div>
     </div>
   </div>
-</Layout>
-	<script src="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.5/source/jsCalendar.min.js" integrity="sha384-F3Wc9EgweCL3C58eDn9902kdEH6bTDL9iW2JgwQxJYUIeudwhm4Wu9JhTkKJUtIJ" crossorigin="anonymous"></script>
- 
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.5/source/jsCalendar.min.css" integrity="sha384-CTBW6RKuDwU/TWFl2qLavDqLuZtBzcGxBXY8WvQ0lShXglO/DsUvGkXza+6QTxs0" crossorigin="anonymous">
-<script type="module">
+  <script is:inline>
+// expose Alpine data under global name `dataBooking`
+     function bookingFormData() {
+                    return {
+                        selectedDate: null,
+                        selectedTime: null,
+                        selectedPax: null,
+                        time_list:[
+                            "08:00 - 10:00",
+                            "10:00 - 12:00",
+                            "12:00 - 14:00",
+                            "14:00 - 16:00"
+                        ],
+                        init(){
+                            // Create the calendar
+                            var el_calendar = document.getElementById("my-calendar");
+                            var myCalendar = jsCalendar.new({
+                                target: el_calendar,      
+                                zeroFill: true,        
+                            });
+                            // Limit to only current month
+                            myCalendar.min("now");
 
-    // Create the calendar
-    var el_calendar = document.getElementById("my-calendar");
-    var myCalendar = jsCalendar.new({
-        target: el_calendar,      
-        zeroFill: true,        
-    });
-    // Limit to only current month
-    myCalendar.min("now");
+                            myCalendar.onDateClick((event, date)=>{
+                                //select calendar 
 
-  document.addEventListener('DOMContentLoaded', () => {
-    let currentStep = 1;
-    let selectedDate = null;
-    let selectedTime = null;
-    let selectedPax = null;
+                                document.getElementById('timeslots-grid').style.display = 'grid';
+                                myCalendar.clearselect()
+                                myCalendar.select(date);
+                                this.selectedDate = date;
+                                location.href = '#timeslots-grid';
 
-    const steps = document.querySelectorAll('.step');
-    const stepContents = document.querySelectorAll('.step-content');
+                            });
+                        }
+                    }
+                }
 
-    // Show step
-    function showStep(step) {
-      stepContents.forEach(content => content.classList.remove('active'));
-      steps.forEach(s => s.classList.remove('active'));
+  //   // Create the calendar
+  //   var el_calendar = document.getElementById("my-calendar");
+  //   var myCalendar = jsCalendar.new({
+  //       target: el_calendar,      
+  //       zeroFill: true,        
+  //   });
+  //   // Limit to only current month
+  //   myCalendar.min("now");
+    
+  // document.addEventListener('DOMContentLoaded', () => {
+  //   let currentStep = 1;
+  //   let selectedDate = null;
+  //   let selectedTime = null;
+  //   let selectedPax = null;
+
+  //   const steps = document.querySelectorAll('.step');
+  //   const stepContents = document.querySelectorAll('.step-content');
+
+  //   // Show step
+  //   function showStep(step) {
+  //     stepContents.forEach(content => content.classList.remove('active'));
+  //     steps.forEach(s => s.classList.remove('active'));
       
-      document.getElementById(`step-${step}`).classList.add('active');
-      document.querySelector(`[data-step="${step}"]`).classList.add('active');
+  //     document.getElementById(`step-${step}`).classList.add('active');
+  //     document.querySelector(`[data-step="${step}"]`).classList.add('active');
       
-      currentStep = step;
-      updateNavigationButtons();
-    }
-   myCalendar.onDateClick((event, date)=>{
-        
-         showStep(3);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+  //     currentStep = step;
+  //     updateNavigationButtons();
+  //   }
+  //  myCalendar.onDateClick((event, date)=>{
+  //         //select calendar 
 
-    // Update navigation buttons
-    function updateNavigationButtons() {
-      const prevBtns = document.querySelectorAll('.prev-step');
-      const nextBtns = document.querySelectorAll('.next-step');
-      const confirmBtn = document.getElementById('btn-confirm');
+  //         document.getElementById('timeslots-grid').style.display = 'grid';
+  //         myCalendar.clearselect()
+  //   myCalendar.select(date);
+  //   selectedDate = date;
+  //         location.href = '#timeslots-grid';
+         
+  //   });
 
-      prevBtns.forEach(btn => {
-        btn.disabled = currentStep === 1;
-      });
+  //   // Update navigation buttons
+  //   function updateNavigationButtons() {
+  //     const prevBtns = document.querySelectorAll('.prev-step');
+  //     const nextBtns = document.querySelectorAll('.next-step');
+  //     const confirmBtn = document.getElementById('btn-confirm');
 
-      // Enable next button only if date is selected
-      nextBtns.forEach(btn => {
-        if (currentStep === 2) {
-          btn.disabled = !selectedDate;
-        }else{
-            btn.disabled = false;
-        }
-      });
+  //     prevBtns.forEach(btn => {
+  //       btn.disabled = currentStep === 1;
+  //     });
 
-      // Enable confirm button only if time is selected
-      if (confirmBtn) {
-        confirmBtn.disabled = !selectedTime;
-      }
-    }
-    document.getElementById('btn-confirm').onclick=async ()=>{
-      console.log(await checkout());
-    }
-    // Next step buttons
-    document.querySelectorAll('.next-step').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (currentStep < 3) {
-          showStep(currentStep + 1);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-      });
-    });
+    
 
-    // Previous step buttons
-    document.querySelectorAll('.prev-step').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (currentStep > 1) {
-          showStep(currentStep - 1);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-      });
-    });
+  //     // Enable confirm button only if time is selected
+  //     if (confirmBtn) {
+  //       confirmBtn.disabled = !selectedTime;
+  //     }
+  //   }
+  //   document.getElementById('btn-confirm').onclick=async ()=>{
+  //     console.log(await checkout());
+  //   }
+  //   // Next step buttons
+  //   document.querySelectorAll('.next-step').forEach(btn => {
+  //     btn.addEventListener('click', () => {
+  //       if (currentStep < 3) {
+  //         showStep(currentStep + 1);
+  //         window.scrollTo({ top: 0, behavior: 'smooth' });
+  //       }
+  //     });
+  //   });
 
-    // Calendar day selection
-    const calendarDays = document.querySelectorAll('.calendar-day.available');
-    calendarDays.forEach(day => {
-      day.addEventListener('click', () => {
-        calendarDays.forEach(d => d.classList.remove('selected'));
-        day.classList.add('selected');
-        showStep(currentStep - 3);
-        selectedDate = day.textContent;
-        updateNavigationButtons();
-      });
-    });
+  //   // Previous step buttons
+  //   document.querySelectorAll('.prev-step').forEach(btn => {
+  //     btn.addEventListener('click', () => {
+  //       if (currentStep > 1) {
+  //         showStep(currentStep - 1);
+  //         window.scrollTo({ top: 0, behavior: 'smooth' });
+  //       }
+  //     });
+  //   });
 
-    // Time slot selection
-    const timeslotBtns = document.querySelectorAll('.timeslot-btn');
-    timeslotBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.timeslot-btn').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        selectedTime = btn.textContent;
-        document.getElementById('selected-time').textContent = `Waktu: ${selectedTime}`;
-        showStep(4); // <-- ini yang membuat step 4 aktif!
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        updateNavigationButtons();
-      });
-    });
+  //   // Calendar day selection
+  //   const calendarDays = document.querySelectorAll('.calendar-day.available');
+  //   calendarDays.forEach(day => {
+  //     day.addEventListener('click', () => {
+  //       calendarDays.forEach(d => d.classList.remove('selected'));
+  //       day.classList.add('selected');
+  //       showStep(currentStep - 3);
+  //       selectedDate = day.textContent;
+  //       updateNavigationButtons();
+  //     });
+  //   });
 
-    // Pax selection
-    const paxBtns = document.querySelectorAll('.pax-btn');
-    const paxInput = document.getElementById('pax-manual-input');
-    const selectedPaxInfo = document.getElementById('selected-pax');
-    const btnConfirm = document.getElementById('btn-confirm');
+  //   // Time slot selection
+  //   const timeslotBtns = document.querySelectorAll('.timeslot-btn');
+  //   timeslotBtns.forEach(btn => {
+  //     btn.addEventListener('click', () => {
+  //       document.querySelectorAll('.timeslot-btn').forEach(b => b.classList.remove('selected'));
+  //       btn.classList.add('selected');
+  //       selectedTime = btn.textContent;
+  //       document.getElementById('selected-time').textContent = `Waktu: ${selectedTime}`;
+   
+  //       updateNavigationButtons();
+  //     });
+  //   });
 
-    paxBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        paxBtns.forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        selectedPax = btn.getAttribute('data-pax');
-        selectedPaxInfo.textContent = `Jumlah: ${selectedPax}`;
-        btnConfirm.disabled = false;
-        paxInput.value = ""; // clear manual input
-      });
-    });
+  //   // Pax selection
+  //   const paxBtns = document.querySelectorAll('.pax-btn');
+  //   const paxInput = document.getElementById('pax-manual-input');
+  //   const selectedPaxInfo = document.getElementById('selected-pax');
+  //   const btnConfirm = document.getElementById('btn-confirm');
 
-    // Manual input handler
-    paxInput.addEventListener('input', () => {
-      paxBtns.forEach(b => b.classList.remove('selected'));
-      let val = parseInt(paxInput.value, 10);
-      if (val > 0 && val <= 99) {
-        selectedPax = val;
-        selectedPaxInfo.textContent = `Jumlah: ${selectedPax}`;
-        btnConfirm.disabled = false;
-      } else {
-        selectedPaxInfo.textContent = "Jumlah: -";
-        btnConfirm.disabled = true;
-      }
-    });
-    async function checkout (){
-      const response =  await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ /* data pembayaran */ })
-      })
-      .then(res => res.json())
+  //   paxBtns.forEach(btn => {
+  //     btn.addEventListener('click', () => {
+  //       paxBtns.forEach(b => b.classList.remove('selected'));
+  //       btn.classList.add('selected');
+  //       selectedPax = btn.getAttribute('data-pax');
+  //       selectedPaxInfo.textContent = `Jumlah: ${selectedPax}`;
+  //       btnConfirm.disabled = false;
+  //       paxInput.value = ""; // clear manual input
+  //     });
+  //   });
+
+  //   // Manual input handler
+  //   paxInput.addEventListener('input', () => {
+  //     paxBtns.forEach(b => b.classList.remove('selected'));
+  //     let val = parseInt(paxInput.value, 10);
+  //     if (val > 0 && val <= 99) {
+  //       selectedPax = val;
+  //       selectedPaxInfo.textContent = `Jumlah: ${selectedPax}`;
+  //       btnConfirm.disabled = false;
+  //     } else {
+  //       selectedPaxInfo.textContent = "Jumlah: -";
+  //       btnConfirm.disabled = true;
+  //     }
+  //   });
+  //   async function checkout (){
+  //     const response =  await fetch('/api/checkout', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ /* data pembayaran */ })
+  //     })
+  //     .then(res => res.json())
      
-      console.log(response);
-    }
-    // Update selected date display
-    document.querySelectorAll('.calendar-day.available').forEach(day => {
-      const originalClick = day.onclick;
-      day.addEventListener('click', () => {
-        document.getElementById('selected-date').textContent = `Tanggal: ${day.textContent} Oktober 2025`;
-      });
-    });
+  //     console.log(response);
+  //   }
+  //   // Update selected date display
+  //   document.querySelectorAll('.calendar-day.available').forEach(day => {
+  //     const originalClick = day.onclick;
+  //     day.addEventListener('click', () => {
+  //       document.getElementById('selected-date').textContent = `Tanggal: ${day.textContent} Oktober 2025`;
+  //     });
+  //   });
 
-    // Confirm booking
-    document.getElementById('btn-confirm')?.addEventListener('click', () => {
-      alert(`Booking Confirmed!\nTanggal: ${selectedDate}\nWaktu: ${selectedTime}\nJumlah: ${selectedPax}`);
-    });
+  //   // Confirm booking
+  //   document.getElementById('btn-confirm')?.addEventListener('click', () => {
+  //     alert(`Booking Confirmed!\nTanggal: ${selectedDate}\nWaktu: ${selectedTime}\nJumlah: ${selectedPax}`);
+  //   });
 
-    updateNavigationButtons();
-  });
+  //   updateNavigationButtons();
+  // });
 </script>
+</Layout>
+
+
 
 <style>
  
