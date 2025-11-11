@@ -16,17 +16,17 @@ import "../../styles/global.css";
 
     <!-- Stepper -->
     <div class="stepper">
-      <div class="step active" data-step="1">
+      <div class="step " :class="{'active': step === 1}" data-step="1">
         <div class="step-number">1</div>
         <div class="step-label">Date time</div>
       </div>
       <div class="step-line"></div>
-      <div class="step" data-step="2">
+      <div class="step" :class="{'active': step === 2}" data-step="2">
         <div class="step-number">2</div>
         <div class="step-label">Menu</div>
       </div>
       <div class="step-line"></div>
-      <div class="step" data-step="3">
+      <div class="step" :class="{'active': step === 3}" data-step="3">
         <div class="step-number">3</div>
         <div class="step-label">Confirm</div>
       </div>
@@ -34,14 +34,14 @@ import "../../styles/global.css";
 
     <div class="steps-container">
       <!-- Step 1: Detail & Termasuk -->
-      <div class="step-content active" id="step-1">
+      <div class=" active" id="step-1" x-show="step === 1">
         <aside class="sidebar">
           <div class="sidebar-section">
              <div id="my-calendar" style="display: flex;flex-direction: row;justify-content: center;"></div>
                <div class="timeslots-grid" id="timeslots-grid">
                 <template x-for="time in time_list" :key="time">
-                  <button class="timeslot-btn" @click="selectedTime = time; document.getElementById('selected-time').textContent = `Waktu: ${time}`">
-                    <span class="timeslot-label"></span>
+                  <button class="timeslot-btn" :class="{'active': selectedTime === time}" @click="selectedTime = time;">
+                    <span class="timeslot-label" x-html="time"></span>
                   </button>
                 </template>
           </div>
@@ -50,12 +50,12 @@ import "../../styles/global.css";
 
         <div class="step-actions">
           <button class="btn-secondary" disabled>Sebelumnya</button>
-          <button class="btn-primary next-step">Selanjutnya</button>
+          <button class="btn-primary next-step" @click="step = 2">Selanjutnya</button>
         </div>
       </div>
 
       <!-- Step 2: Calendar -->
-      <div class="step-content flex justify-center" id="step-2">
+      <div class=" flex flex-col justify-center" x-show="step == 2" >
         <!-- buat pilihan menu dengan checkbox -->
         <div class="menu-options">
           <h2 class="menu-title">Pilih Menu Tambahan</h2>
@@ -74,17 +74,14 @@ import "../../styles/global.css";
             </label>
           </div>
         </div>
-
-
-
         <div class="step-actions">
           <button class="btn-secondary prev-step">Sebelumnya</button>
-            <button class="btn-primary next-step">Selanjutnya</button>
+            <button class="btn-primary next-step" @click="step = 3">Selanjutnya</button>
         </div>
       </div>
 
       <!-- Step 3: Time Slot -->
-      <div class="step-content" id="step-3">
+      <div class="" x-show="step === 3">
         <section class="timeslot-section">
           <h2 class="timeslot-title">Pilih Slot Waktu</h2>
           <p class="timeslot-desc" id="selected-date">Tanggal: -</p>
@@ -128,12 +125,8 @@ import "../../styles/global.css";
                         selectedDate: null,
                         selectedTime: null,
                         selectedPax: null,
-                        time_list:[
-                            "08:00 - 10:00",
-                            "10:00 - 12:00",
-                            "12:00 - 14:00",
-                            "14:00 - 16:00"
-                        ],
+                        time_list:[],
+                        step:1,
                         init(){
                             // Create the calendar
                             var el_calendar = document.getElementById("my-calendar");
@@ -151,6 +144,16 @@ import "../../styles/global.css";
                                 myCalendar.clearselect()
                                 myCalendar.select(date);
                                 this.selectedDate = date;
+                                this.time_list = [
+                                  '09:00 AM',
+                                  '10:00 AM',
+                                  '11:00 AM',
+                                  '12:00 PM',
+                                  '01:00 PM',
+                                  '02:00 PM',
+                                  '03:00 PM',
+                                  '04:00 PM',
+                                ];
                                 location.href = '#timeslots-grid';
 
                             });
@@ -324,7 +327,10 @@ import "../../styles/global.css";
 
 
 <style>
- 
+  .timeslot-btn.active {
+    background-color: #0f172a;
+    color: #fff;
+  }
   .activity-container {
     max-width: 1200px;
     margin: 0 auto;
