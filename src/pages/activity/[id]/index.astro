@@ -1,6 +1,66 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import "../../styles/global.css";
+import Layout from '../../../layouts/Layout.astro';
+import "../../../styles/global.css";
+
+// Ticket data (rendered server-side). Replace with real data source when available.
+const tickets = [
+  {
+    id: 'weekday-package',
+    name: 'Jatim Park 1 + Museum Tubuh + Museum Angkut Weekday',
+    price: 'IDR 180.000',
+    features: [
+      'Akses Jatim Park 1',
+      'Akses Museum Tubuh',
+      'Akses Museum Angkut',
+      'Berlaku Senin - Jumat',
+    ],
+    href: '/activity/jatim-park-weekday',
+  },
+  {
+    id: 'weekend-package',
+    name: 'Jatim Park 1 + Museum Tubuh + Museum Angkut Weekend',
+    price: 'IDR 200.000',
+    features: [
+      'Akses Jatim Park 1',
+      'Akses Museum Tubuh',
+      'Akses Museum Angkut',
+      'Berlaku Sabtu, Minggu & Hari Libur',
+    ],
+    href: '/activity/jatim-park-weekend',
+  },
+  {
+    id: 'angkut-weekend',
+    name: 'Jatim Park 1 + Museum Angkut Weekend',
+    price: 'IDR 170.000',
+    features: [
+      'Akses Jatim Park 1',
+      'Akses Museum Angkut',
+      'Berlaku Sabtu, Minggu & Hari Libur',
+    ],
+    href: '/activity/jatim-park-angkut-weekend',
+  },
+  {
+    id: 'angkut-weekday',
+    name: 'Jatim Park 1 + Museum Angkut Weekday',
+    price: 'IDR 150.000',
+    features: [
+      'Akses Jatim Park 1',
+      'Akses Museum Angkut',
+      'Berlaku Senin - Jumat',
+    ],
+    href: '/activity/jatim-park-angkut-weekday',
+  },
+];
+// Example static paths for activity pages. Replace with real data source when available.
+export async function getStaticPaths() {
+  const ids = [
+    'jatim-park-weekday',
+    'jatim-park-weekend',
+    'jatim-park-family',
+  ];
+
+  return ids.map((id) => ({ params: { id } }));
+}
 ---
 
 <Layout>
@@ -109,77 +169,28 @@ import "../../styles/global.css";
 
 <!-- Ticket Selection Section -->
 <section class="tickets-section" aria-label="Pilihan Tiket">
-  <div class="tickets-container">
-  
+    <div class="tickets-container">
 
-    <div class="ticket-list">
-      <div class="ticket-card">
-        <div class="ticket-content">
-          <h3 class="ticket-name">Jatim Park 1 + Museum Tubuh + Museum Angkut Weekend</h3>
-          <p class="ticket-price">Dari <span class="price-value">IDR 200.000</span></p>
-          <button class="detail-toggle" aria-expanded="false">Lihat Detail & Termasuk</button>
-          <div class="accordion-detail" hidden>
-            <ul class="detail-list">
-              <li>✓ Akses Jatim Park 1</li>
-              <li>✓ Akses Museum Tubuh</li>
-              <li>✓ Akses Museum Angkut</li>
-              <li>✓ Berlaku Sabtu, Minggu & Hari Libur</li>
-            </ul>
+      <div class="ticket-list">
+        {tickets.map((ticket) => (
+          <div class="ticket-card"      data-id={ticket.id}>
+            <div class="ticket-content">
+              <h3 class="ticket-name">{ticket.name}</h3>
+              <p class="ticket-price">Dari <span class="price-value">{ticket.price}</span></p>
+              <button class="detail-toggle" aria-expanded="false">Lihat Detail & Termasuk</button>
+              <div class="accordion-detail" hidden>
+                <ul class="detail-list">
+                  {ticket.features.map((f) => (
+                    <li>{f}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <a href={'/activity/' + Astro.params.id + '/' + ticket.id} class="btn-buy">Pilih</a>
           </div>
-        </div>
-        <a href="/activity" class="btn-buy">Pilih</a>
-      </div>
-
-      <div class="ticket-card">
-        <div class="ticket-content">
-          <h3 class="ticket-name">Jatim Park 1 + Museum Tubuh + Museum Angkut Weekday</h3>
-          <p class="ticket-price">Dari <span class="price-value">IDR 180.000</span></p>
-          <button class="detail-toggle" aria-expanded="false">Lihat Detail & Termasuk</button>
-          <div class="accordion-detail" hidden>
-            <ul class="detail-list">
-              <li>✓ Akses Jatim Park 1</li>
-              <li>✓ Akses Museum Tubuh</li>
-              <li>✓ Akses Museum Angkut</li>
-              <li>✓ Berlaku Senin - Jumat</li>
-            </ul>
-          </div>
-        </div>
-        <button class="btn-buy">Pilih</button>
-      </div>
-
-      <div class="ticket-card">
-        <div class="ticket-content">
-          <h3 class="ticket-name">Jatim Park 1 + Museum Angkut Weekend</h3>
-          <p class="ticket-price">Dari <span class="price-value">IDR 170.000</span></p>
-          <button class="detail-toggle" aria-expanded="false">Lihat Detail & Termasuk</button>
-          <div class="accordion-detail" hidden>
-            <ul class="detail-list">
-              <li>✓ Akses Jatim Park 1</li>
-              <li>✓ Akses Museum Angkut</li>
-              <li>✓ Berlaku Sabtu, Minggu & Hari Libur</li>
-            </ul>
-          </div>
-        </div>
-        <button class="btn-buy">Pilih</button>
-      </div>
-
-      <div class="ticket-card">
-        <div class="ticket-content">
-          <h3 class="ticket-name">Jatim Park 1 + Museum Angkut Weekday</h3>
-          <p class="ticket-price">Dari <span class="price-value">IDR 150.000</span></p>
-          <button class="detail-toggle" aria-expanded="false">Lihat Detail & Termasuk</button>
-          <div class="accordion-detail" hidden>
-            <ul class="detail-list">
-              <li>✓ Akses Jatim Park 1</li>
-              <li>✓ Akses Museum Angkut</li>
-              <li>✓ Berlaku Senin - Jumat</li>
-            </ul>
-          </div>
-        </div>
-        <button class="btn-buy">Pilih</button>
+        ))}
       </div>
     </div>
-  </div>
 </section>
 
   </div>

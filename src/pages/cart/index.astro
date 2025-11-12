@@ -1,0 +1,165 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import "../../styles/global.css";
+// Minimal demo data for the cart. Replace with real data or a store as needed.
+const cart = [
+	{
+	id: 'jatim-park-1',
+	title: 'Jawa Timur Park 1',
+	subtitle: 'Jatim Park 1 + Museum Tubuh + Museum Angkut\nWeekend (Per Pax)',
+	qty: 2,
+	pricePerPax: 200000,
+	date: '29 Nov 2025, 08.30 - 16.30'
+	}
+];
+
+/** @type {(n:number)=>string} */
+const formatCurrency = (n:number) => {
+	return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits:0 }).format(Number(n) || 0);
+};
+---
+
+<Layout>
+		<main class="cart-page">
+			<div class="container mx-auto px-4 py-8">
+				<h1 class="page-title">Checkout</h1>
+
+				<div class="checkout-grid">
+			<!-- Left: Contact / Billing -->
+					<section class="card contact-card">
+						<h2 class="card-title">Kontak Informasi</h2>
+
+						<label class="form-field">
+							<input type="email" id="email" placeholder="Email*" />
+						</label>
+
+						<label class="form-field">
+							<input type="text" id="name" placeholder="Nama*" />
+						</label>
+
+						<div class="phone-field">
+							<div class="phone-prefix">+62</div>
+							<input type="tel" id="phone" placeholder="812-345-678" />
+						</div>
+
+						<label class="form-checkbox">
+							<input type="checkbox" id="agree" />
+							<span>Dengan melakukan pembelian ini, saya menyatakan bahwa saya telah membaca, memahami, dan menyetujui <a href="#">Persyaratan dan Ketentuan berikut</a>.</span>
+						</label>
+					</section>
+
+	<!-- Right: Cart summary -->
+			<aside class="card summary-card">
+				<div class="summary-header">
+					<h3>Keranjang Saya (<span id="cart-count">{cart.length}</span>)</h3>
+					<button class="btn-icon" id="btn-clear" title="Kosongkan keranjang">🗑️</button>
+				</div>
+
+				<div class="cart-items" id="cart-items">
+					{cart.map(item => (
+						<div class="cart-item" data-id={item.id}>
+			  <div class="item-title">{item.title}</div>
+			  <div class="item-sub">{item.subtitle}</div>
+			  <div class="item-meta">{item.qty} pax X 200.000</div>
+							<div class="item-meta">{item.date}</div>
+						</div>
+					))}
+	</div>
+
+				<div class="promo-row flex justify-center items-center">
+					<input type="text" id="promo-code" placeholder="Kode Promo" />
+					<button id="apply-promo" class="btn-apply btn-secondary py-3 ">Claim</button>
+				</div>
+				<div class="summary-total">
+					<div class="total-label">Total</div>
+					<div class="total-value" id="total-value">{formatCurrency(cart.reduce((s,i)=> s + (i.qty * i.pricePerPax), 0))}</div>
+	</div>
+
+				<div class="summary-actions">
+					<button class="btn-secondary" id="btn-back">Back</button>
+					<button class="btn-buy" id="btn-pay">Payment</button>
+				</div>
+			</aside>
+			</div>
+		</div>
+	</main>
+
+	<script is:inline>
+		(function(){
+			// Basic interactivity: clear cart and apply promo (UI-only demo)
+	const cart = JSON.parse(JSON.stringify({items: []}));
+	// Use server-side values present in the DOM for demo
+	const btnClear = document.getElementById('btn-clear');
+			btnClear?.addEventListener('click', ()=>{
+				const itemsEl = document.getElementById('cart-items');
+				if(!itemsEl) return;
+	itemsEl.innerHTML = '<div class="empty">Keranjang kosong.</div>';
+	document.getElementById('cart-count').textContent = '0';
+	document.getElementById('total-value').textContent = 'IDR 0';
+	});
+
+	document.getElementById('apply-promo')?.addEventListener('click', ()=>{
+	const code = document.getElementById('promo-code').value.trim();
+	if(!code){ alert('Masukkan kode promo'); return; }
+	// Demo: apply 10% discount
+	const totalEl = document.getElementById('total-value');
+	if(!totalEl) return;
+	const current = parseInt(totalEl.textContent.replace(/\D/g,'')) || 0;
+	const discounted = Math.max(0, Math.round(current * 0.9));
+	totalEl.textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits:0 }).format(discounted);
+	alert('Promo diterapkan: ' + code);
+	});
+
+	document.getElementById('btn-pay')?.addEventListener('click', ()=>{
+				alert('Lanjutkan ke pembayaran (demo)');
+			});
+		})();
+	</script>
+
+	<style>
+		.page-title{ font-size:28px; margin:24px 0; }
+		.checkout-grid{ display:grid; grid-template-columns: 1fr 380px; gap:20px; align-items:start; }
+	.card{ background:#fff; border:1px solid #eee; border-radius:6px; padding:18px; box-shadow:0 1px 0 rgba(0,0,0,0.02);} 
+	.contact-card input[type="text"], .contact-card input[type="email"], .contact-card input[type="tel"], .summary-card input[type="text"]{ width:100%; padding:12px; border:1px solid #e5e7eb; border-radius:6px; margin:8px 0; }
+	.form-field{ display:block; }
+	.phone-field{ display:flex; gap:8px; align-items:center; }
+	.phone-prefix{ background:#fff; border:1px solid #e5e7eb; padding:10px; border-radius:6px; }
+	.form-checkbox{ display:flex; gap:8px; align-items:flex-start; margin-top:12px; font-size:13px; color:#374151; }
+
+	.summary-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+	.summary-header h3{ margin:0; font-size:16px; }
+	.btn-icon{ background:transparent; border:none; cursor:pointer; font-size:16px; }
+
+	.cart-item{ padding:12px 0; border-top:1px solid #f3f4f6; }
+	.cart-item:first-child{ border-top:none; }
+	.item-title{ font-weight:700; color:#0f172a; }
+	.item-sub{ color:#6b7280; white-space:pre-line; margin:6px 0; }
+	.item-meta{ color:#6b7280; font-size:13px; }
+
+		.promo-row{ display:flex; gap:8px; margin:14px 0; }
+		.promo-row input{ flex:1; }
+		.btn-apply{ padding:10px 14px; border-radius:6px; cursor:pointer; }
+		.btn-apply.small{ padding:8px 12px; font-size:13px; }
+
+		.summary-total{ display:flex; justify-content:space-between; align-items:center; padding-top:12px; border-top:1px solid #f3f4f6; margin-top:8px; }
+		.total-label{ font-weight:700; font-size:18px; }
+		.total-value{ font-weight:800; font-size:18px; }
+		.total-value .price-value{ font-weight:800; }
+
+		.summary-actions{ display:flex; gap:12px; justify-content:flex-end; margin-top:18px; }
+		/* primary (dark) */
+		.btn-buy{ background:#0f172a; color:#fff; border:none; padding:10px 20px; border-radius:6px; cursor:pointer; font-weight:700; }
+		.btn-buy:hover{ background:#111827; }
+
+		/* secondary (outline) */
+		.btn-secondary{ background:#fff; color:#0f172a; border:1px solid #e5e7eb; padding:10px 18px; border-radius:6px; cursor:pointer; font-weight:600; }
+		.btn-secondary:hover{ background:#f9fafb; }
+
+		@media (max-width: 900px){
+			.checkout-grid{ grid-template-columns: 1fr; }
+			.summary-card{ order: -1; }
+		}
+	</style>
+
+</Layout>
+

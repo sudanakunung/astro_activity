@@ -1,0 +1,918 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+
+import "../../../../styles/global.css";
+
+// Provide static paths for the dynamic activity routes.
+// Replace the hard-coded ids below with a real data source (API or local JSON)
+// when available.
+export async function getStaticPaths() {
+  // Example activities data and package slugs (replace with your real data source)
+  const activities = [
+    { id: 'jatim-park-family', packages: ['weekend-package', 'weekday-package'] },
+    { id: 'jatim-park-weekend', packages: ['weekend-package'] },
+    { id: 'jatim-park-weekday', packages: ['weekday-package'] },
+  ];
+
+  // Build all combinations of activity id + package slug
+  // Build paths using flatMap to avoid explicit pushes
+  const paths = activities.flatMap((activity) =>
+    activity.packages.map((pkg) => ({ params: { id: activity.id, package: pkg } }))
+  );
+
+  return paths;
+}
+
+
+---
+
+<Layout>
+  <div class="activity-container" x-data="bookingFormData()" x-init="">
+    <!-- Header -->
+    <div class="activity-header">
+      <h1 class="activity-title">Jatim Park 1 + Museum Tubuh + Museum Angkut Weekday</h1>
+      <p class="activity-price">Dari <span class="price-value">IDR 180.000</span></p>
+      <button class="btn-booking">Booking</button>
+      <!-- show route params (first and second segment) -->
+       <div>
+      <a href="/activity">Activity /</a>
+      <a href={`/activity/${Astro.params.id}`}>{Astro.params.id}</a>/
+      <a href={`/activity/${Astro.params.id}/${Astro.params.package}`}>{Astro.params.package}</a>
+      </div>
+    </div>
+
+    <!-- Stepper -->
+    <div class="stepper">
+      <div class="step " :class="{'active': step === 1}" data-step="1">
+        <div class="step-number">1</div>
+        <div class="step-label">Date time</div>
+      </div>
+      <div class="step-line"></div>
+      <div class="step" :class="{'active': step === 2}" data-step="2">
+        <div class="step-number">2</div>
+        <div class="step-label">Menu</div>
+      </div>
+      <div class="step-line"></div>
+      <div class="step" :class="{'active': step === 3}" data-step="3">
+        <div class="step-number">3</div>
+        <div class="step-label">Confirm</div>
+      </div>
+    </div>
+
+    <div class="steps-container">
+      <!-- Step 1: Detail & Termasuk -->
+      <div class=" active" id="step-1" x-show="step === 1">
+        <aside class="sidebar">
+          <div class="sidebar-section">
+            <div class="pax-control">
+              <div class="pax-left">
+                <div class="pax-label">Per Pax</div>
+                <div class="pax-sub">Rentang Usia (3 - 99)</div>
+              </div>
+
+              <div class="pax-price">IDR <span class="price-value">200,000</span></div>
+
+              <div class="pax-counter">
+                <button type="button" class="pax-btn" @click="selectedPax = Math.max(1, selectedPax - 1)">-</button>
+                <div class="pax-number" x-text="selectedPax">1</div>
+                <button type="button" class="pax-btn" @click="selectedPax = selectedPax + 1">+</button>
+              </div>
+            </div>
+             <div id="my-calendar" style="display: flex;flex-direction: row;justify-content: center;"></div>
+               <div class="timeslots-grid" id="timeslots-grid">
+                <template x-for="time in time_list" :key="time">
+                  <button class="timeslot-btn" :class="{'active': selectedTime === time}" @click="selectedTime = time;">
+                    <span class="timeslot-label" x-html="time"></span>
+                  </button>
+                </template>
+          </div>
+          </div>
+        </aside>
+
+        <div class="step-actions">
+          <button class="btn-secondary" disabled>Sebelumnya</button>
+          <button class="btn-primary next-step" @click="step = 2">Selanjutnya</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Calendar -->
+      <div class=" flex flex-col justify-center" x-show="step == 2" >
+        <!-- buat pilihan menu dengan checkbox -->
+        <div class="menu-options">
+          <h2 class="menu-title">Select Menu</h2>
+          <div class="flex flex-col space-y-2">
+            <label class="menu-item border p-4 hover:bg-gray-50 rounded-md">
+              <input type="radio" name="menu-option" class="menu-radio" value="meal" />
+              <span class="menu-label">Paket Makan Siang (+IDR 50,000)</span>
+            </label>
+            <label class="menu-item border p-4 hover:bg-gray-50 rounded-md">
+              <input type="radio" name="menu-option" class="menu-radio" value="guide" />
+              <span class="menu-label">Pemandu Wisata (+IDR 75,000)</span>
+            </label>
+            <label class="menu-item border p-4 hover:bg-gray-50 rounded-md">
+              <input type="radio" name="menu-option" class="menu-radio" value="transport" />
+              <span class="menu-label">Transportasi Antar Jemput (+IDR 100,000)</span>
+            </label>
+          </div>
+        </div>
+        <div class="step-actions">
+          <button class="btn-secondary prev-step" @click="step = 1">Sebelumnya</button>
+            <button class="btn-primary next-step" @click="step = 3">Selanjutnya</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Time Slot -->
+      <div class="" x-show="step === 3">
+        <section class="timeslot-section">
+          <h2 class="timeslot-title">Confirm booking</h2>
+
+          <!-- Booking preview card -->
+          <div class="booking-card" x-cloak>
+            <div class="booking-card-left">
+              <div class="card-title">Jawa Timur Park 1</div>
+              <div class="card-desc">Jatim Park 1 + Museum Tubuh + Museum Angkut Weekday (Per Pax)</div>
+          
+                <div class="" x-text="selectedPax ? selectedPax + ' pax X 200.000' : '-'">-</div>
+              
+                <div class="" x-text="selectedDate ? (selectedDate instanceof Date ? selectedDate.toLocaleDateString() : selectedDate) : '-'">-</div>
+             
+                  <div class="" x-text="selectedTime ? selectedTime : '-'">-</div>
+           
+               <div class="" x-text="selectedMenu ? selectedMenu : 'Menu: -'">Menu: -</div>
+            </div>
+
+           
+          </div>
+
+        </section>
+
+        <div class="step-actions">
+          <button class="btn-secondary prev-step" @click="step = 2">Sebelumnya</button>
+          <a href="/cart" class="btn-primary" id="btn-confirm">Konfirmasi Booking</a>
+        </div>
+      </div>
+
+    
+    </div>
+  </div>
+  <script is:inline>
+// expose Alpine data under global name `dataBooking`
+   function bookingFormData() {
+          return {
+            selectedDate: null,
+            selectedTime: null,
+            selectedPax: 1,
+            selectedMenu: null,
+            time_list:[],
+            step:1,
+            init(){
+              // Create the calendar
+              var el_calendar = document.getElementById("my-calendar");
+              var myCalendar = jsCalendar.new({
+                target: el_calendar,      
+                zeroFill: true,        
+              });
+              // Limit to only current month
+              myCalendar.min("now");
+
+              // wire calendar date click
+              myCalendar.onDateClick((event, date)=>{
+                //select calendar 
+                if(date< new Date()) return;
+                document.getElementById('timeslots-grid').style.display = 'grid';
+                myCalendar.clearselect()
+                myCalendar.select(date);
+                this.selectedDate = date;
+                this.time_list = [
+                  '09:00 AM',
+                  '10:00 AM',
+                  '11:00 AM',
+                  '12:00 PM',
+                  '01:00 PM',
+                  '02:00 PM',
+                  '03:00 PM',
+                  '04:00 PM',
+                ];
+                location.href = '#timeslots-grid';
+
+              });
+
+              // wire menu radio inputs into Alpine state so we can show selected menu in the preview card
+              const updateMenuFromRadios = () => {
+                const sel = document.querySelector('input[name="menu-option"]:checked');
+                this.selectedMenu = sel ? (sel.nextElementSibling?.textContent?.trim() || sel.value) : null;
+              };
+
+              document.querySelectorAll('input[name="menu-option"]').forEach(i => i.addEventListener('change', () => updateMenuFromRadios()));
+              // init menu from current selected radio (if any)
+              updateMenuFromRadios();
+            }
+          }
+        }
+
+  
+</script>
+</Layout>
+
+
+
+<style>
+  .timeslot-btn.active {
+    background-color: #0f172a;
+    color: #fff;
+  }
+  .activity-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .activity-header {
+    margin-bottom: 32px;
+  }
+
+  .activity-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 8px 0;
+  }
+
+  .activity-price {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0 0 16px 0;
+  }
+
+  .price-value {
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  .btn-booking {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-booking:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+  }
+
+  /* Stepper */
+  .stepper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 32px 0;
+    padding: 0 20px;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  .step-number {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #e5e7eb;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #9ca3af;
+    background: #fff;
+    transition: all 0.3s;
+  }
+
+  .step.active .step-number {
+    background: #0f172a;
+    color: #fff;
+    border-color: #0f172a;
+  }
+
+  .step-label {
+    font-size: 13px;
+    color: #9ca3af;
+    font-weight: 600;
+  }
+
+  .step.active .step-label {
+    color: #0f172a;
+  }
+
+  .step-line {
+    width: 40px;
+    height: 2px;
+    background: #e5e7eb;
+  }
+
+  /* Steps Container */
+  .steps-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .step-content {
+    display: none;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .step-content.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Sidebar (Step 1) */
+  .sidebar {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .sidebar-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .sidebar-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+  }
+
+  .section-desc {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    margin: 0;
+  }
+
+  .desc-text {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .section-subtitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 8px 0 6px 0;
+  }
+
+  .includes-list,
+  .usage-list {
+    margin: 0;
+    padding: 0 0 0 16px;
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.6;
+  }
+
+  .includes-list li,
+  .usage-list li {
+    margin-bottom: 4px;
+  }
+
+  .view-more {
+    color: #0f172a;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 8px;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 2px;
+    transition: border-color 0.2s;
+  }
+
+  .view-more:hover {
+    border-color: #0f172a;
+  }
+
+  /* Calendar Section (Step 2) */
+  .calendar-section {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .calendar-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 16px 0;
+  }
+
+  .calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .calendar-month {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0;
+  }
+
+  .calendar-nav {
+    display: flex;
+    gap: 8px;
+  }
+
+  .calendar-btn {
+    background: #fff;
+    color: #0f172a;
+    border: 1px solid #e5e7eb;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+
+  .calendar-btn:hover {
+    background: #f3f4f6;
+    border-color: #d1d5db;
+  }
+
+  .calendar-legend {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    font-size: 13px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #6b7280;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .dot.available {
+    background: #0f172a;
+  }
+
+  .dot.unavailable {
+    background: #d1d5db;
+  }
+
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+  }
+
+  .day-header {
+    text-align: center;
+    font-weight: 600;
+    font-size: 12px;
+    color: #9ca3af;
+    padding: 8px 0;
+    text-transform: uppercase;
+  }
+
+  .calendar-day {
+    aspect-ratio: 1;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    color: #0f172a;
+    transition: all 0.2s;
+    position: relative;
+  }
+ 
+  .calendar-day.available:hover {
+    border-color: #0f172a;
+    background: #f9fafb;
+  }
+
+  .calendar-day.available::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background: #0f172a;
+    border-radius: 50%;
+  }
+
+  .calendar-day.unavailable {
+    background: #f3f4f6;
+    color: #d1d5db;
+    cursor: not-allowed;
+  }
+
+  .calendar-day.selected {
+    background: #0f172a;
+    color: #fff;
+    border-color: pink;
+  }
+
+  .calendar-day.selected::after {
+    display: none;
+  }
+
+  /* Time Slot Section (Step 3) */
+  .timeslot-section {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .timeslot-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 8px 0;
+  }
+
+  .timeslot-desc {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0 0 20px 0;
+    text-align: center;
+  }
+
+  /* Booking preview card used in Confirm step */
+  .booking-card {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fff;
+    align-items: center;
+  }
+
+  .booking-card-left {
+    flex: 1 1 auto;
+  }
+
+  .card-title {
+    font-weight: 700;
+    color: #0f172a;
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+
+  .card-desc {
+    color: #6b7280;
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+
+  .card-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    font-weight: 600;
+    color: #374151;
+  }
+
+  .card-qty { font-weight: 700; color: #0f172a; }
+
+  .card-datetime { display: flex; flex-direction: column; font-size: 13px; color: #6b7280; }
+
+  .booking-card-right { min-width: 160px; text-align: right; }
+
+  .card-menu { font-weight: 700; color: #0f172a; }
+
+  .timeslots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .timeslot-btn {
+    padding: 12px 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background: #fff;
+    color: #0f172a;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+
+
+  .timeslot-btn.selected {
+    background: gray;
+    color: #fff;
+    border-color: #0f172a;
+  }
+
+  .timeslot-info {
+    font-size: 14px;
+    color: #6b7280;
+    text-align: center;
+    margin: 0;
+  }
+
+  /* Pax Section (Step 4) */
+  .pax-section {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .pax-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 16px 0;
+  }
+
+  .pax-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .pax-btn {
+    padding: 12px 0;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background: black;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .pax-btn:disabled {
+    background: #f3f4f6;
+    color: #d1d5db;
+    cursor: not-allowed;
+  }
+  .pax-btn:hover {
+    border-color: #0f172a;
+    background: black;
+    color:white
+  }
+
+  .pax-btn.selected {
+    background: #0f172a;
+    color: #fff;
+    border-color: #0f172a;
+  }
+
+  .pax-manual {
+    margin: 16px 0 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pax-manual-label {
+    font-size: 13px;
+    color: #6b7280;
+  }
+  .pax-manual-input {
+    width: 80px;
+    padding: 8px 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 14px;
+    background: #fff;
+    color: #0f172a;
+    transition: border-color 0.2s;
+  }
+  .pax-manual-input:focus {
+    border-color: #0f172a;
+    outline: none;
+  }
+
+  .pax-info {
+    font-size: 14px;
+    color: #6b7280;
+    text-align: center;
+    margin: 0;
+  }
+
+  /* Pax control (per-pax selector) */
+  .pax-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fff;
+  }
+
+  .pax-left {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pax-label {
+    font-weight: 700;
+    color: #0f172a;
+    font-size: 14px;
+  }
+
+  .pax-sub {
+    font-size: 12px;
+    color: #6b7280;
+  }
+
+  .pax-price {
+    font-weight: 700;
+    color: #0f172a;
+    font-size: 16px;
+    white-space: nowrap;
+  }
+
+  .pax-counter {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .pax-number {
+    min-width: 28px;
+    text-align: center;
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  .pax-btn {
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color:white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  .pax-btn:active { transform: translateY(1px); }
+
+  /* Step Actions */
+  .step-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+  }
+
+  .btn-primary {
+    background: #0f172a;
+    color: #fff;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background: #1f2937;
+  }
+
+  .btn-primary:disabled {
+    background: #e5e7eb;
+    cursor: not-allowed;
+  }
+
+  .btn-secondary {
+    background: #fff;
+    color: #0f172a;
+    border: 1px solid #e5e7eb;
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    background: #f9fafb;
+    border-color: #d1d5db;
+  }
+
+  .btn-secondary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    .activity-content {
+      grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+      order: 2;
+    }
+
+    .activity-main {
+      order: 1;
+    }
+
+    .activity-title {
+      font-size: 18px;
+    }
+
+    .calendar-grid {
+      gap: 6px;
+    }
+
+    .calendar-day {
+      font-size: 12px;
+    }
+
+    .stepper {
+      gap: 8px;
+      margin: 24px 0;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      font-size: 12px;
+    }
+
+    .step-label {
+      font-size: 11px;
+    }
+
+    .step-line {
+      width: 20px;
+    }
+
+    .timeslots-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .step-actions {
+      flex-direction: column;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      width: 100%;
+    }
+  }
+</style>
