@@ -20,7 +20,7 @@ const items = romantic.items;
           <div class="p-4">
             <h3 class="font-medium">{item.title}</h3>
             <p class="text-sm text-gray-600 mt-2">{item.excerpt}</p>
-            <a href={'/activity/' + item.slug} class="text-sm font-semibold mt-3 inline-block">DETAILS</a>
+            <a href={item.detailsPath} class="text-sm font-semibold mt-3 inline-block">DETAILS</a>
           </div>
         </article>
       ))}

@@ -10,30 +10,46 @@ import "../../../styles/global.css";
     <div class="checkout-grid">
       <!-- Left: Form Kontak -->
       <form class="checkout-form" id="checkoutForm">
-        <h2 class="form-title">Kontak Informasi</h2>
-        <div class="form-group">
-          <label for="email">Email*</label>
-          <input type="email" id="email" name="email" required placeholder="Email*" />
-          <small class="form-hint">Harap berikan email yang valid untuk menerima e-tiket Anda.</small>
-        </div>
-        <div class="form-group">
-          <label for="name">Nama*</label>
-          <input type="text" id="name" name="name" required placeholder="Nama*" />
-        </div>
-        <div class="form-group phone-group">
-          <label for="phone">Nomor Telepon*</label>
-          <div class="phone-input">
-            <span class="country-code">+62</span>
-            <input type="tel" id="phone" name="phone" required placeholder="812-345-678" pattern="[0-9]{9,13}" />
+        <h2 class="form-title">Let us know who you are</h2>
+        <div class="">
+          <div class="row-two">
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <input type="text" id="firstName" name="firstName" required placeholder="Ali" />
+            </div>
+
+            <div class="form-group">
+              <label for="lastName">Last name</label>
+              <input type="text" id="lastName" name="lastName" required placeholder="TUFAN" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required placeholder="creativelayers088@gmail.com" />
+            <small class="form-hint">Harap berikan email yang valid untuk menerima e-tiket Anda.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="phone" required placeholder="+90 (254) 458 96 32" />
+          </div>
+
+        
+
+          <div class="form-group full">
+            <label for="special">Special Requirements</label>
+            <textarea id="special" name="special" rows="4" placeholder="Special Requirements"></textarea>
           </div>
         </div>
+
         <div class="form-group terms-group">
           <input type="checkbox" id="terms" name="terms" required />
           <label for="terms">
             Dengan melakukan pembelian ini, saya menyatakan bahwa saya telah membaca, memahami, dan menyetujui
-            <a href="#" target="_blank" class="terms-link">Persyaratan dan Ketentuan berikut</a>.
+            <a href="#" target="_blank" class="terms-link">Persyaratan dan Ketentuan</a>.
           </label>
-        </div>
+        </div>      
       </form>
       <!-- Right: Keranjang -->
       <aside class="checkout-cart">
@@ -78,9 +94,10 @@ import "../../../styles/global.css";
 }
 .checkout-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* two equal-width columns */
   gap: 32px;
   align-items: stretch;
+  grid-auto-rows: 1fr; /* ensure both columns stretch to same height */
 }
 .checkout-form,
 .checkout-cart {
@@ -132,6 +149,38 @@ import "../../../styles/global.css";
   color: #6b7280;
   margin-top: 4px;
 }
+/* two-column form grid */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 20px;
+}
+.row-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.form-group.full {
+  grid-column: 1 / -1;
+}
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+select,
+textarea {
+  padding: 10px 12px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 15px;
+  background: #fff;
+  color: #0f172a;
+  transition: border-color 0.2s;
+}
+.form-group textarea { resize: vertical; }
 .phone-group .phone-input {
   display: flex;
   align-items: center;
@@ -271,6 +320,12 @@ import "../../../styles/global.css";
   .checkout-cart {
     max-width: 100%;
     min-width: 0;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .row-two {
+    grid-template-columns: 1fr;
   }
 }
 </style>

@@ -1,7 +1,7 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import "../../../styles/global.css";
-
+import romantic from '../../../data/romantic-experiences.json';
 // Ticket data (rendered server-side). Replace with real data source when available.
 const tickets = [
   {
@@ -53,14 +53,11 @@ const tickets = [
 ];
 // Example static paths for activity pages. Replace with real data source when available.
 export async function getStaticPaths() {
-  const ids = [
-    'jatim-park-weekday',
-    'jatim-park-weekend',
-    'jatim-park-family',
-  ];
+  const ids = romantic.items.map(item => item.slug);
 
   return ids.map((id) => ({ params: { id } }));
 }
+const current = romantic.items.find(item => item.slug === Astro.params.id) || null;
 ---
 
 <Layout>
@@ -110,8 +107,8 @@ export async function getStaticPaths() {
 
 <!-- Detail section di bawah slideshow -->
 <section class="details" style="width: 100%;" aria-label="Details">
-  <div class="meta">Jawa Timur Park - PT Bunga Wangsa Sedjati</div>
-  <h1 class="venue-title">Jawa Timur Park 1</h1>
+  <div class="meta">{}</div>
+  <h1 class="venue-title">{current ? current.title : 'Activity'}</h1>
 
   <nav class="tabs" role="tablist" aria-label="Informasi">
     <button class="tab active" role="tab" aria-selected="true" data-target="Description">Description</button>
@@ -124,13 +121,9 @@ export async function getStaticPaths() {
   <div class="tab-panels ">
     <article id="Description" class="panel active w-full" role="tabpanel">
       <h2 class="section-title">Sorotan</h2>
-      <ul class="bullets">
-        <li>Benamkan diri Anda dalam hari penuh kegembiraan tanpa henti di Jatim Park 1 dan Museum Tubuh.</li>
-        <li>Menggugah semua penggemar roller coaster! Pilih dari berbagai pilihan, termasuk Himalaya Coaster.</li>
-        <li>Ingin lebih banyak adrenalin? Rasakan sensasi Pendulum 360° dan Tornado Terbang!</li>
-        <li>Biarkah diri Anda kecil kecil lagi bersama-senang dengan wahana ramah anak seperti Froggy, Dragon Coaster dan lainnya.</li>
-        <li>Selami dunia penuh air di Jatim Park 1, tujuan keluarga terbaik yang menawakan wahana yang mengagumkan dan lain-lain.</li>
-      </ul>
+      <article>
+      <p>{current ? current.excerpt : 'Deskripsi tidak tersedia.'}</p>
+      </article>
 
       <hr class="divider" />
 

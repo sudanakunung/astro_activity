@@ -2,27 +2,22 @@
 import Layout from '../../../../layouts/Layout.astro';
 
 import "../../../../styles/global.css";
+import romantic from '../../../../data/romantic-experiences.json';
 
 // Provide static paths for the dynamic activity routes.
 // Replace the hard-coded ids below with a real data source (API or local JSON)
 // when available.
 export async function getStaticPaths() {
-  // Example activities data and package slugs (replace with your real data source)
-  const activities = [
-    { id: 'jatim-park-family', packages: ['weekend-package', 'weekday-package'] },
-    { id: 'jatim-park-weekend', packages: ['weekend-package'] },
-    { id: 'jatim-park-weekday', packages: ['weekday-package'] },
-  ];
 
   // Build all combinations of activity id + package slug
   // Build paths using flatMap to avoid explicit pushes
-  const paths = activities.flatMap((activity) =>
+  const paths = romantic.items.flatMap((activity) =>
     activity.packages.map((pkg) => ({ params: { id: activity.id, package: pkg } }))
   );
 
   return paths;
 }
-
+const current = romantic.items.find(item => item.id === Astro.params.id);
 
 ---
 
@@ -30,7 +25,7 @@ export async function getStaticPaths() {
   <div class="activity-container" x-data="bookingFormData()" x-init="">
     <!-- Header -->
     <div class="activity-header">
-      <h1 class="activity-title">Jatim Park 1 + Museum Tubuh + Museum Angkut Weekday</h1>
+      <h1 class="activity-title">{current?.title} - {Astro.params.package}</h1>
       <p class="activity-price">Dari <span class="price-value">IDR 180.000</span></p>
       <button class="btn-booking">Booking</button>
       <!-- show route params (first and second segment) -->
@@ -45,7 +40,7 @@ export async function getStaticPaths() {
     <div class="stepper">
       <div class="step " :class="{'active': step === 1}" data-step="1">
         <div class="step-number">1</div>
-        <div class="step-label">Date time</div>
+        <div class="step-label">Detail</div>
       </div>
       <div class="step-line"></div>
       <div class="step" :class="{'active': step === 2}" data-step="2">

@@ -1,0 +1,150 @@
+{
+  "collectionTitle": "Romantic Experiences",
+  "description": "Let love blossom in the heart of Ubud. Curated romantic experiences for couples — from floating candlelit dinners to private in-villa moments.",
+  "items": [
+    {
+      "id": "photo-moment-on-the-boat",
+      "slug": "photo-moment-on-the-boat",
+      "title": "Photo Moment on the Boat",
+      "excerpt": "Take a picturesque short ride surrounded by verdant lotus fields in a traditional sampan. Capture stunning photos and create unforgettable memories on this one-of-a-kind experience.",
+      "image": "https://picsum.photos/seed/photo-moment-on-the-boat/1200/800",
+      "detailsPath": "/experiences/photo-moment-on-the-boat",
+        "packages": ["weekend-package", "weekday-package"]
+    },
+    {
+      "id": "starlit-cinema",
+      "slug": "starlit-cinema",
+      "title": "Starlit Cinema: Ubud's Cozy Bohemian Movie Nights",
+      "excerpt": "Experience the magic of cinema under the stars. Our Starlit Cinema offers a cozy bohemian setting with curated films, comfortable seating and romantic ambience.",
+      "image": "https://picsum.photos/seed/starlit-cinema/1200/800",
+      "detailsPath": "/experiences/starlit-cinema",
+        "packages": ["weekend-package", "weekday-package"]
+    },
+    {
+      "id": "lunch-in-color",
+      "slug": "lunch-in-color",
+      "title": "Lunch in Color: A Cozy Escape for Two",
+      "excerpt": "Escape to a vibrant outdoor experience, where every corner bursts with color and charm. Designed for couples who enjoy relaxed, intimate dining with a joyful atmosphere.",
+      "image": "https://picsum.photos/seed/lunch-in-color/1200/800",
+      "detailsPath": "/experiences/lunch-in-color",
+        "packages": ["weekend-package", "weekday-package"]
+    },
+    {
+      "id": "sip-savor-relax",
+      "slug": "sip-savor-relax",
+      "title": "Sip, Savor, and Relax: A Luxurious High Tea Experience",
+      "excerpt": "Enjoy a delightful high tea in an elegant setting, featuring handcrafted pastries and specialty teas — a refined escape amid Ubud's rice fields.",
+      "image": "https://picsum.photos/seed/sip-savor-relax/1200/800",
+      "detailsPath": "/experiences/sip-savor-relax",
+        "packages": ["weekend-package", "weekday-package"]
+    },
+    {
+      "id": "magical-night-under-the-stars",
+      "slug": "magical-night-under-the-stars",
+      "title": "A Magical Night Under the Stars: Candlelit Floating Dinner",
+      "excerpt": "Experience an unforgettable floating dinner set in a serene pool — candlelit tables, gentle music and an intimate atmosphere for couples.",
+      "image": "https://picsum.photos/seed/magical-night/1200/800",
+      "detailsPath": "/experiences/magical-night-under-the-stars",
+        "packages": ["weekend-package", "weekday-package"]
+    },
+    {
+      "id": "balinese-night-market",
+      "slug": "balinese-night-market",
+      "title": "Balinese Night Market",
+      "excerpt": "Stroll through a vibrant night market featuring local street food, handicrafts and live entertainment — a lively cultural evening to share together.",
+      "image": "https://picsum.photos/seed/balinese-night-market/1200/800",
+      "detailsPath": "/experiences/balinese-night-market",
+        "packages": ["weekend-package", "weekday-package"]
+    },
+    {
+      "id": "forest-dining",
+      "slug": "forest-dining",
+      "title": "Forest Dining",
+      "excerpt": "Dine beneath the canopy of the jungle, surrounded by the sounds of nature — a romantic and atmospheric culinary experience.",
+      "image": "https://picsum.photos/seed/forest-dining/1200/800",
+      "detailsPath": "/experiences/forest-dining",
+        "packages": ["weekend-package", "weekday-package"]
+    },
+    {
+      "id": "romantic-dinner",
+      "slug": "romantic-dinner",
+      "title": "Romantic Dinner",
+      "excerpt": "An intimate fine-dining experience crafted for two — candlelight, curated menus and attentive service in private settings.",
+      "image": "https://picsum.photos/seed/romantic-dinner/1200/800",
+      "detailsPath": "/experiences/romantic-dinner",
+        "packages": ["weekend-package", "weekday-package"]
+    },
+    {
+      "id": "in-villa-romantic-dinner",
+      "slug": "in-villa-romantic-dinner",
+      "title": "In-Villa Romantic Dinner",
+      "excerpt": "Enjoy a private dining experience in the comfort of your villa, with bespoke menus and a personalised setting for couples.",
+      "image": "https://picsum.photos/seed/in-villa-dinner/1200/800",
+      "detailsPath": "/experiences/in-villa-romantic-dinner",
+        "packages": ["weekend-package", "weekday-package"]
+    },
+    {
+      "id": "candlelight-garden-dinner",
+      "slug": "candlelight-garden-dinner",
+      "title": "Candlelight Garden Dinner",
+      "excerpt": "A serene dinner in a garden setting illuminated by candles — perfect for memorable, romantic moments.",
+      "image": "https://picsum.photos/seed/candlelight-garden/1200/800",
+      "detailsPath": "/experiences/candlelight-garden-dinner",
+        "packages": ["weekend-package", "weekday-package"]
+    },
+    {
+      "id": "vedika-candlelight-dinner",
+      "slug": "vedika-candlelight-dinner",
+      "title": "Vedika Candlelight Dinner",
+      "excerpt": "A special candlelight experience inspired by local flavours and romantic ambience — ideal for anniversaries and proposals.",
+      "image": "https://picsum.photos/seed/vedika/1200/800",
+      "detailsPath": "/experiences/vedika-candlelight-dinner",
+        "packages": ["weekend-package", "weekday-package"]
+    },
+    {
+      "id": "sunset-barbecue-pool",
+      "slug": "sunset-barbecue-pool",
+      "title": "Sunset Barbecue Dinner by the Pool",
+      "excerpt": "Relax by the pool and enjoy a barbecue dinner as the sun sets — casual, flavorful and perfect for couples who love laid-back evenings.",
+      "image": "https://picsum.photos/seed/sunset-bbq/1200/800",
+      "detailsPath": "/experiences/sunset-barbecue-pool",
+        "packages": ["weekend-package", "weekday-package"]
+    },
+    {
+      "id": "balinese-cooking-class",
+      "slug": "balinese-cooking-class",
+      "title": "Balinese Cooking Class",
+      "excerpt": "Learn the secrets of Balinese cuisine together in a hands-on cooking class — a fun and delicious bonding activity.",
+      "image": "https://picsum.photos/seed/balinese-cooking/1200/800",
+      "detailsPath": "/experiences/balinese-cooking-class",
+        "packages": ["weekend-package", "weekday-package"]
+    },
+    {
+      "id": "romantic-flower-bath",
+      "slug": "romantic-flower-bath",
+      "title": "Romantic Flower Bath",
+      "excerpt": "Indulge in a private flower bath ritual — relaxing, aromatic and beautifully presented for a luxurious couple's experience.",
+      "image": "https://picsum.photos/seed/flower-bath/1200/800",
+      "detailsPath": "/experiences/romantic-flower-bath",
+      "packages": ["weekend-package", "weekday-package"]
+    },
+    {
+      "id": "kids-activities",
+      "slug": "kids-activities",
+      "title": "Kids Activities",
+      "excerpt": "Family-friendly activities for younger guests so parents can enjoy a worry-free romantic outing while kids are entertained.",
+      "image": "https://picsum.photos/seed/kids-activities/1200/800",
+      "detailsPath": "/experiences/kids-activities",
+      "packages": ["weekend-package", "weekday-package"]
+    },
+    {
+      "id": "awana-pool-daypass",
+      "slug": "awana-pool-daypass",
+      "title": "Awana Pool Daypass",
+      "excerpt": "Relax by the pool with a day pass — enjoy facilities and a perfect day by the water.",
+      "image": "https://picsum.photos/seed/awana-pool/1200/800",
+      "detailsPath": "/experiences/awana-pool-daypass",
+        "packages": ["weekend-package", "weekday-package"]
+    }
+  ]
+}
