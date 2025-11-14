@@ -9,10 +9,10 @@ const tickets = [
     name: 'Jatim Park 1 + Museum Tubuh + Museum Angkut Weekday',
     price: 'IDR 180.000',
     features: [
-      'Akses Jatim Park 1',
-      'Akses Museum Tubuh',
-      'Akses Museum Angkut',
-      'Berlaku Senin - Jumat',
+      'Access to Jatim Park 1',
+      'Access to Museum Tubuh',
+      'Access to Museum Angkut',
+      'Valid Monday - Friday',
     ],
     href: '/activity/jatim-park-weekday',
   },
@@ -21,10 +21,10 @@ const tickets = [
     name: 'Jatim Park 1 + Museum Tubuh + Museum Angkut Weekend',
     price: 'IDR 200.000',
     features: [
-      'Akses Jatim Park 1',
-      'Akses Museum Tubuh',
-      'Akses Museum Angkut',
-      'Berlaku Sabtu, Minggu & Hari Libur',
+      'Access to Jatim Park 1',
+      'Access to Museum Tubuh',
+      'Access to Museum Angkut',
+      'Valid Saturday, Sunday & Public Holidays',
     ],
     href: '/activity/jatim-park-weekend',
   },
@@ -33,9 +33,9 @@ const tickets = [
     name: 'Jatim Park 1 + Museum Angkut Weekend',
     price: 'IDR 170.000',
     features: [
-      'Akses Jatim Park 1',
-      'Akses Museum Angkut',
-      'Berlaku Sabtu, Minggu & Hari Libur',
+      'Access to Jatim Park 1',
+      'Access to Museum Angkut',
+      'Valid Saturday, Sunday & Public Holidays',
     ],
     href: '/activity/jatim-park-angkut-weekend',
   },
@@ -44,9 +44,9 @@ const tickets = [
     name: 'Jatim Park 1 + Museum Angkut Weekday',
     price: 'IDR 150.000',
     features: [
-      'Akses Jatim Park 1',
-      'Akses Museum Angkut',
-      'Berlaku Senin - Jumat',
+      'Access to Jatim Park 1',
+      'Access to Museum Angkut',
+      'Valid Monday - Friday',
     ],
     href: '/activity/jatim-park-angkut-weekday',
   },
@@ -105,12 +105,12 @@ const current = romantic.items.find(item => item.slug === Astro.params.id) || nu
     </div>
   </section>
 
-<!-- Detail section di bawah slideshow -->
+<!-- Detail section below slideshow -->
 <section class="details" style="width: 100%;" aria-label="Details">
   <div class="meta">{}</div>
   <h1 class="venue-title">{current ? current.title : 'Activity'}</h1>
 
-  <nav class="tabs" role="tablist" aria-label="Informasi">
+  <nav class="tabs" role="tablist" aria-label="Information">
     <button class="tab active" role="tab" aria-selected="true" data-target="Description">Description</button>
     <button class="tab" role="tab" aria-selected="false" data-target="hour">Operating Hours</button>
     <button class="tab" role="tab" aria-selected="false" data-target="menu">Menu</button>
@@ -120,9 +120,9 @@ const current = romantic.items.find(item => item.slug === Astro.params.id) || nu
 
   <div class="tab-panels ">
     <article id="Description" class="panel active w-full" role="tabpanel">
-      <h2 class="section-title">Sorotan</h2>
+      <h2 class="section-title">Highlights</h2>
       <article>
-      <p>{current ? current.excerpt : 'Deskripsi tidak tersedia.'}</p>
+      <p>{current ? current.excerpt : 'Description not available.'}</p>
       </article>
 
       <hr class="divider" />
@@ -132,28 +132,27 @@ const current = romantic.items.find(item => item.slug === Astro.params.id) || nu
       <h2 class="section-title">Menu</h2>
      <ul>
       <li>
-        Nasi Goreng Spesial - IDR 35.000
+        Special Fried Rice - IDR 35.000
       </li>
       <li>
-        Mie Ayam Jamur - IDR 30.000
+        Chicken Noodle with Mushroom - IDR 30.000
       </li>
       <li>
-        Sate Ayam Madura - IDR 40.000
+        Madura Chicken Satay - IDR 40.000
       </li>
      </ul>
     </article>
 
     <article id="hour" class="panel w-full" role="tabpanel" hidden>
-      <h2 class="section-title">Jam Operasional</h2>
-      <p>Senin - Jumat: 09.00 - 17.00 </p>
-      <p>Sabtu - Minggu & Hari Libur: 08.00 - 18.00</p>
-      <p><em>Catatan:</em> Jam dapat berubah saat event atau perawatan wahana.</p>
+      <h2 class="section-title">Operating Hours</h2>
+      <p>Monday - Friday: 09:00 - 17:00 </p>
+      <p>Saturday - Sunday & Public Holidays: 08:00 - 18:00</p>
+      <p><em>Note:</em> Hours may change during events or maintenance.</p>
     </article>
     <article id="venue" class="panel w-full" role="tabpanel" hidden>
       <h2 class="section-title">Venue</h2>
-      <p>Jawa Timur Park 1 terletak di Jalan Kartika No.2, Kota Batu, Jawa Timur, Indonesia. Tempat ini mudah diakses dari pusat kota Malang dan Surabaya, menjadikannya destinasi populer bagi wisatawan lokal dan internasional.</p>
-      <p>Fasilitas di lokasi meliputi area parkir luas, berbagai pilihan makanan dan minuman, serta toko
-      yang menjual suvenir dan barang-barang bertema taman hiburan.</p>
+      <p>Jawa Timur Park 1 is located at Jalan Kartika No.2, Kota Batu, East Java, Indonesia. It is easily accessible from Malang and Surabaya city centers, making it a popular destination for both local and international visitors.</p>
+      <p>On-site facilities include ample parking, a variety of food and beverage options, and souvenir shops selling themed merchandise.</p>
       </article> 
 
    
@@ -161,7 +160,7 @@ const current = romantic.items.find(item => item.slug === Astro.params.id) || nu
 </section>
 
 <!-- Ticket Selection Section -->
-<section class="tickets-section" aria-label="Pilihan Tiket">
+<section class="tickets-section" aria-label="Ticket Options">
     <div class="tickets-container">
 
       <div class="ticket-list">
@@ -169,8 +168,8 @@ const current = romantic.items.find(item => item.slug === Astro.params.id) || nu
           <div class="ticket-card"      data-id={ticket.id}>
             <div class="ticket-content">
               <h3 class="ticket-name">{ticket.name}</h3>
-              <p class="ticket-price">Dari <span class="price-value">{ticket.price}</span></p>
-              <button class="detail-toggle" aria-expanded="false">Lihat Detail & Termasuk</button>
+              <p class="ticket-price">From <span class="price-value">{ticket.price}</span></p>
+              <button class="detail-toggle" aria-expanded="false">View Details & Included</button>
               <div class="accordion-detail" hidden>
                 <ul class="detail-list">
                   {ticket.features.map((f) => (
@@ -179,7 +178,7 @@ const current = romantic.items.find(item => item.slug === Astro.params.id) || nu
                 </ul>
               </div>
             </div>
-            <a href={'/activity/' + Astro.params.id + '/' + ticket.id} class="btn-buy">Pilih</a>
+            <a href={'/activity/' + Astro.params.id + '/' + ticket.id} class="btn-buy">Select</a>
           </div>
         ))}
       </div>
@@ -274,14 +273,14 @@ thumbnails.mount();
           if (acc !== accordion) {
             acc.hidden = true;
             acc.closest('.ticket-content').querySelector('.detail-toggle').setAttribute('aria-expanded', 'false');
-            acc.closest('.ticket-content').querySelector('.detail-toggle').textContent = 'Lihat Detail & Termasuk';
+            acc.closest('.ticket-content').querySelector('.detail-toggle').textContent = 'View Details & Included';
           }
         });
 
         // toggle current accordion
         accordion.hidden = !accordion.hidden;
         toggle.setAttribute('aria-expanded', !isExpanded);
-        toggle.textContent = !isExpanded ? 'Sembunyikan Detail' : 'Lihat Detail & Termasuk';
+        toggle.textContent = !isExpanded ? 'Hide Details' : 'View Details & Included';
       });
     });
   });

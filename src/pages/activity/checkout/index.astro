@@ -8,7 +8,7 @@ import "../../../styles/global.css";
   <div class="checkout-container">
     <h1 class="checkout-title">Checkout</h1>
     <div class="checkout-grid">
-      <!-- Left: Form Kontak -->
+      <!-- Left: Contact Form -->
       <form class="checkout-form" id="checkoutForm">
         <h2 class="form-title">Let us know who you are</h2>
         <div class="">
@@ -27,15 +27,13 @@ import "../../../styles/global.css";
           <div class="form-group">
             <label for="email">Email</label>
             <input type="email" id="email" name="email" required placeholder="creativelayers088@gmail.com" />
-            <small class="form-hint">Harap berikan email yang valid untuk menerima e-tiket Anda.</small>
+            <small class="form-hint">Please provide a valid email to receive your e-ticket.</small>
           </div>
 
           <div class="form-group">
             <label for="phone">Phone</label>
             <input type="tel" id="phone" name="phone" required placeholder="+90 (254) 458 96 32" />
           </div>
-
-        
 
           <div class="form-group full">
             <label for="special">Special Requirements</label>
@@ -46,14 +44,14 @@ import "../../../styles/global.css";
         <div class="form-group terms-group">
           <input type="checkbox" id="terms" name="terms" required />
           <label for="terms">
-            Dengan melakukan pembelian ini, saya menyatakan bahwa saya telah membaca, memahami, dan menyetujui
-            <a href="#" target="_blank" class="terms-link">Persyaratan dan Ketentuan</a>.
+            By making this purchase, I confirm that I have read, understood, and agree to the
+            <a href="#" target="_blank" class="terms-link">Terms & Conditions</a>.
           </label>
         </div>      
       </form>
-      <!-- Right: Keranjang -->
+      <!-- Right: Cart -->
       <aside class="checkout-cart">
-        <h2 class="cart-title">Keranjang Saya (1)</h2>
+        <h2 class="cart-title">My Cart (1)</h2>
         <div class="cart-item">
           <div class="cart-item-title">Jawa Timur Park 1</div>
           <div class="cart-item-desc">Jatim Park 1 + Museum Tubuh + Museum Angkut Weekend (Per Pax)</div>
@@ -61,10 +59,10 @@ import "../../../styles/global.css";
           <div class="cart-item-date">31 Oct 2025, 08.30–16.30</div>
         </div>
         <div class="cart-promo">
-          <label for="promo">Masukkan Kode Promo</label>
+          <label for="promo">Enter Promo Code</label>
           <div class="promo-row">
-            <input type="text" id="promo" name="promo" placeholder="Kode Promo" />
-            <button type="button" class="btn-promo">Terapkan</button>
+            <input type="text" id="promo" name="promo" placeholder="Promo Code" />
+            <button type="button" class="btn-promo">Apply</button>
           </div>
         </div>
         <div class="cart-total-row">
@@ -72,8 +70,8 @@ import "../../../styles/global.css";
           <span class="cart-total-value">IDR 200,000</span>
         </div>
         <div class="cart-actions">
-          <button type="button" class="btn-back">Kembali</button>
-          <button type="submit" form="checkoutForm" class="btn-pay">Lanjutkan Untuk Pembayaran</button>
+          <button type="button" class="btn-back">Back</button>
+          <button type="submit" form="checkoutForm" class="btn-pay">Proceed to Payment</button>
         </div>
       </aside>
     </div>

@@ -20,7 +20,6 @@ export async function getStaticPaths() {
 const current = romantic.items.find(item => item.id === Astro.params.id);
 
 ---
-
 <Layout>
   <div class="activity-container" x-data="bookingFormData()" x-init="">
     <!-- Header -->
@@ -28,8 +27,8 @@ const current = romantic.items.find(item => item.id === Astro.params.id);
       <h1 class="activity-title">{current?.title} - {Astro.params.package}</h1>
  
        <div>
-      <a href="/activity">Activity /</a>
-      <a href={`/activity/${Astro.params.id}`}>{Astro.params.id}</a>/
+      <a href="/activity">Activities /</a>
+      <a href={`/activity/${Astro.params.id}`}>{Astro.params.id}</a> /
       <a href={`/activity/${Astro.params.id}/${Astro.params.package}`}>{Astro.params.package}</a>
       </div>
     </div>
@@ -38,7 +37,7 @@ const current = romantic.items.find(item => item.id === Astro.params.id);
     <div class="stepper">
       <div class="step " :class="{'active': step === 1}" data-step="1">
         <div class="step-number">1</div>
-        <div class="step-label">Detail</div>
+        <div class="step-label">Details</div>
       </div>
       <div class="step-line"></div>
       <div class="step" :class="{'active': step === 2}" data-step="2">
@@ -53,14 +52,14 @@ const current = romantic.items.find(item => item.id === Astro.params.id);
     </div>
 
     <div class="steps-container">
-      <!-- Step 1: Detail & Termasuk -->
+      <!-- Step 1: Detail & Includes -->
       <div class=" active" id="step-1" x-show="step === 1">
         <aside class="sidebar">
           <div class="sidebar-section">
             <div class="pax-control">
               <div class="pax-left">
                 <div class="pax-label">Per Pax</div>
-                <div class="pax-sub">Rentang Usia (3 - 99)</div>
+                <div class="pax-sub">Age Range (3 - 99)</div>
               </div>
 
               <div class="pax-price">IDR <span class="price-value">200,000</span></div>
@@ -83,41 +82,41 @@ const current = romantic.items.find(item => item.id === Astro.params.id);
         </aside>
 
         <div class="step-actions">
-          <button class="btn-secondary" disabled>Sebelumnya</button>
-          <button class="btn-primary next-step" @click="step = 2">Selanjutnya</button>
+          <button class="btn-secondary" disabled>Previous</button>
+          <button class="btn-primary next-step" @click="step = 2">Next</button>
         </div>
       </div>
 
-      <!-- Step 2: Calendar -->
+      <!-- Step 2: Menu -->
       <div class=" flex flex-col justify-center" x-show="step == 2" >
-        <!-- buat pilihan menu dengan checkbox -->
+        <!-- menu options -->
         <div class="menu-options">
           <h2 class="menu-title">Select Menu</h2>
           <div class="flex flex-col space-y-2">
             <label class="menu-item border p-4 hover:bg-gray-50 rounded-md">
               <input type="radio" name="menu-option" class="menu-radio" value="meal" />
-              <span class="menu-label">Paket Makan Siang (+IDR 50,000)</span>
+              <span class="menu-label">Lunch Package (+IDR 50,000)</span>
             </label>
             <label class="menu-item border p-4 hover:bg-gray-50 rounded-md">
               <input type="radio" name="menu-option" class="menu-radio" value="guide" />
-              <span class="menu-label">Pemandu Wisata (+IDR 75,000)</span>
+              <span class="menu-label">Tour Guide (+IDR 75,000)</span>
             </label>
             <label class="menu-item border p-4 hover:bg-gray-50 rounded-md">
               <input type="radio" name="menu-option" class="menu-radio" value="transport" />
-              <span class="menu-label">Transportasi Antar Jemput (+IDR 100,000)</span>
+              <span class="menu-label">Round-trip Transport (+IDR 100,000)</span>
             </label>
           </div>
         </div>
         <div class="step-actions">
-          <button class="btn-secondary prev-step" @click="step = 1">Sebelumnya</button>
-            <button class="btn-primary next-step" @click="step = 3">Selanjutnya</button>
+          <button class="btn-secondary prev-step" @click="step = 1">Previous</button>
+            <button class="btn-primary next-step" @click="step = 3">Next</button>
         </div>
       </div>
 
-      <!-- Step 3: Time Slot -->
+      <!-- Step 3: Confirm -->
       <div class="" x-show="step === 3">
         <section class="timeslot-section">
-          <h2 class="timeslot-title">Confirm booking</h2>
+          <h2 class="timeslot-title">Confirm Booking</h2>
 
           <!-- Booking preview card -->
           <div class="booking-card" x-cloak>
@@ -140,12 +139,11 @@ const current = romantic.items.find(item => item.id === Astro.params.id);
         </section>
 
         <div class="step-actions">
-          <button class="btn-secondary prev-step" @click="step = 2">Sebelumnya</button>
-          <a href="/activity/checkout" class="btn-primary" id="btn-confirm">Konfirmasi Booking</a>
+          <button class="btn-secondary prev-step" @click="step = 2">Previous</button>
+          <button  class="btn-primary" @click="add_to_cart()" id="btn-confirm">Add to Cart</button>
+          <button  class="btn-primary"  @click="checkout()" id="btn-confirm">add & Checkout</button>
         </div>
       </div>
-
-    
     </div>
   </div>
   <script is:inline>
@@ -199,9 +197,26 @@ const current = romantic.items.find(item => item.id === Astro.params.id);
               document.querySelectorAll('input[name="menu-option"]').forEach(i => i.addEventListener('change', () => updateMenuFromRadios()));
               // init menu from current selected radio (if any)
               updateMenuFromRadios();
-            }
+            },
+            add_to_cart(){
+              localStorage.setItem('cart', JSON.stringify([{
+                id: '{Astro.params.id}-{Astro.params.package}',
+                title: '{current?.title}',
+                subtitle: '{Astro.params.package}',
+                qty: this.selectedPax,
+                date: this.selectedDate ? (this.selectedDate instanceof Date ? this.selectedDate.toLocaleDateString() : this.selectedDate) : '-',
+                pricePerPax: 200000,
+              }]));
+              alert('Added to cart!');
+              window.location.href = '/activity';
+
+            },
+            checkout(){
+              this.add_to_cart();
+              window.location.href = '/activity/checkout';
           }
         }
+      }
 
   
 </script>
