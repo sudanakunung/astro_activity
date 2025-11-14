@@ -26,9 +26,7 @@ const current = romantic.items.find(item => item.id === Astro.params.id);
     <!-- Header -->
     <div class="activity-header">
       <h1 class="activity-title">{current?.title} - {Astro.params.package}</h1>
-      <p class="activity-price">Dari <span class="price-value">IDR 180.000</span></p>
-      <button class="btn-booking">Booking</button>
-      <!-- show route params (first and second segment) -->
+ 
        <div>
       <a href="/activity">Activity /</a>
       <a href={`/activity/${Astro.params.id}`}>{Astro.params.id}</a>/
@@ -143,7 +141,7 @@ const current = romantic.items.find(item => item.id === Astro.params.id);
 
         <div class="step-actions">
           <button class="btn-secondary prev-step" @click="step = 2">Sebelumnya</button>
-          <a href="/cart" class="btn-primary" id="btn-confirm">Konfirmasi Booking</a>
+          <a href="/activity/checkout" class="btn-primary" id="btn-confirm">Konfirmasi Booking</a>
         </div>
       </div>
 
