@@ -140,8 +140,8 @@ const current = romantic.items.find(item => item.id === Astro.params.id);
 
         <div class="step-actions">
           <button class="btn-secondary prev-step" @click="step = 2">Previous</button>
-          <button  class="btn-primary" @click="add_to_cart()" id="btn-confirm">Add to Cart</button>
-          <button  class="btn-primary"  @click="checkout()" id="btn-confirm">add & Checkout</button>
+          <button  class="btn-primary" @click="to_activity_list()" id="btn-confirm">Add to Cart</button>
+          <button  class="btn-primary"  @click="checkout()" id="btn-confirm">Checkout Now</button>
         </div>
       </div>
     </div>
@@ -198,6 +198,10 @@ const current = romantic.items.find(item => item.id === Astro.params.id);
               // init menu from current selected radio (if any)
               updateMenuFromRadios();
             },
+            to_activity_list(){
+              this.add_to_cart();
+              window.location.href = '/activity';
+            },
             add_to_cart(){
               localStorage.setItem('cart', JSON.stringify([{
                 id: '{Astro.params.id}-{Astro.params.package}',
@@ -207,8 +211,7 @@ const current = romantic.items.find(item => item.id === Astro.params.id);
                 date: this.selectedDate ? (this.selectedDate instanceof Date ? this.selectedDate.toLocaleDateString() : this.selectedDate) : '-',
                 pricePerPax: 200000,
               }]));
-              alert('Added to cart!');
-              window.location.href = '/activity';
+             
 
             },
             checkout(){
