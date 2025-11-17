@@ -93,6 +93,10 @@ const current = romantic.items.find(item => item.id === Astro.params.id);
         <div class="menu-options">
           <h2 class="menu-title">Select Menu</h2>
           <div class="flex flex-col space-y-2">
+               <label class="menu-item border p-4 hover:bg-gray-50 rounded-md">
+              <input type="radio" name="menu-option" class="menu-radio" value="none" />
+              <span class="menu-label">None</span>
+            </label>
             <label class="menu-item border p-4 hover:bg-gray-50 rounded-md">
               <input type="radio" name="menu-option" class="menu-radio" value="meal" />
               <span class="menu-label">Lunch Package (+IDR 50,000)</span>
