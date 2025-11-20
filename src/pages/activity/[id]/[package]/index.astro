@@ -71,13 +71,30 @@ const current = romantic.items.find(item => item.id === Astro.params.id);
               </div>
             </div>
              <div id="my-calendar" style="display: flex;flex-direction: row;justify-content: center;"></div>
-               <div class="timeslots-grid" id="timeslots-grid">
+             <div x-show="selectedDate">
+                <div>
+                <label for="">Duration</label>
+                <ul class="grid grid-cols-2 gap-2 mb-1">
+                  <button class="timeslot-btn" :class="{'active': selectedDuration === 1}" @click="selectedDuration = 1">1 Hours</button>
+                  <button class="timeslot-btn" :class="{'active': selectedDuration === 2}" @click="selectedDuration = 2">2 Hours</button>
+                  <button class="timeslot-btn" :class="{'active': selectedDuration === 3}" @click="selectedDuration = 3">3 Hours</button>
+                  <button class="timeslot-btn" :class="{'active': selectedDuration === 4}" @click="selectedDuration = 4">4 Hours</button>
+
+                </ul>
+             </div>
+
+             <label for="">Time Slots</label>
+              <div class="timeslots-grid" >
                 <template x-for="time in time_list" :key="time">
                   <button class="timeslot-btn" :class="{'active': selectedTime === time}" @click="selectedTime = time;">
                     <span class="timeslot-label" x-html="time"></span>
                   </button>
                 </template>
           </div>
+             </div>
+                
+        
+              
           </div>
         </aside>
 
@@ -91,7 +108,7 @@ const current = romantic.items.find(item => item.id === Astro.params.id);
       <div class=" flex flex-col justify-center" x-show="step == 2" >
         <!-- menu options -->
         <div class="menu-options">
-          <h2 class="menu-title">Select Menu</h2>
+          <h2 class="menu-title">enhancements (optional)</h2>
           <div class="flex flex-col space-y-2">
                <label class="menu-item border p-4 hover:bg-gray-50 rounded-md">
               <input type="radio" name="menu-option" class="menu-radio" value="none" />
@@ -99,15 +116,15 @@ const current = romantic.items.find(item => item.id === Astro.params.id);
             </label>
             <label class="menu-item border p-4 hover:bg-gray-50 rounded-md">
               <input type="radio" name="menu-option" class="menu-radio" value="meal" />
-              <span class="menu-label">Lunch Package (+IDR 50,000)</span>
+              <span class="menu-label">sewa dress (+IDR 50,000)</span>
             </label>
             <label class="menu-item border p-4 hover:bg-gray-50 rounded-md">
               <input type="radio" name="menu-option" class="menu-radio" value="guide" />
-              <span class="menu-label">Tour Guide (+IDR 75,000)</span>
+              <span class="menu-label">jasa potograper (+IDR 75,000)</span>
             </label>
             <label class="menu-item border p-4 hover:bg-gray-50 rounded-md">
               <input type="radio" name="menu-option" class="menu-radio" value="transport" />
-              <span class="menu-label">Round-trip Transport (+IDR 100,000)</span>
+              <span class="menu-label">jasa drone (+IDR 100,000)</span>
             </label>
           </div>
         </div>
@@ -133,8 +150,9 @@ const current = romantic.items.find(item => item.id === Astro.params.id);
                 <div class="" x-text="selectedDate ? (selectedDate instanceof Date ? selectedDate.toLocaleDateString() : selectedDate) : '-'">-</div>
              
                   <div class="" x-text="selectedTime ? selectedTime : '-'">-</div>
+                  <div class="" x-text="selectedDuration ? selectedDuration + ' Hours' : '-'">-</div>
            
-               <div class="" x-text="selectedMenu ? selectedMenu : 'Menu: -'">Menu: -</div>
+               <div class="" x-text="selectedMenu ? selectedMenu : 'Enhancements: -'">Enhancements: -</div>
             </div>
 
            
@@ -156,6 +174,7 @@ const current = romantic.items.find(item => item.id === Astro.params.id);
           return {
             selectedDate: null,
             selectedTime: null,
+            selectedDuration: null,
             selectedPax: 1,
             selectedMenu: null,
             time_list:[],
@@ -174,7 +193,7 @@ const current = romantic.items.find(item => item.id === Astro.params.id);
               myCalendar.onDateClick((event, date)=>{
                 //select calendar 
                 if(date< new Date()) return;
-                document.getElementById('timeslots-grid').style.display = 'grid';
+                
                 myCalendar.clearselect()
                 myCalendar.select(date);
                 this.selectedDate = date;

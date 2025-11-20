@@ -111,15 +111,27 @@ const current = romantic.items.find(item => item.slug === Astro.params.id) || nu
   <h1 class="venue-title">{current ? current.title : 'Activity'}</h1>
 
   <nav class="tabs" role="tablist" aria-label="Information">
-    <button class="tab active" role="tab" aria-selected="true" data-target="Description">Description</button>
+    <button class="tab active" role="tab" aria-selected="true" data-target="description">Description</button>
+    <button class="tab active" role="tab" aria-selected="true" data-target="menu">Menu</button>
+    <button class="tab" role="tab" aria-selected="false" data-target="enhancements">Enhancements</button>
     <button class="tab" role="tab" aria-selected="false" data-target="hour">Operating Hours</button>
-    <button class="tab" role="tab" aria-selected="false" data-target="menu">Menu</button>
     <button class="tab" role="tab" aria-selected="false" data-target="venue">Venue</button>
     
   </nav>
 
   <div class="tab-panels ">
-    <article id="Description" class="panel active w-full" role="tabpanel">
+    <article id="enhancements" class="panel w-full" role="tabpanel" hidden>
+      <h2 class="section-title">Enhancements</h2>
+      <p>Enhance your visit with these exciting options:</p>
+      <ul class="bullets">
+        <li>Guided Tour: Explore the park with an expert guide who will share fascinating insights and stories.</li>
+        <li>VIP Access: Skip the lines and enjoy priority entry to all attractions.</li>
+        <li>Photo Package: Capture your memories with a professional photo package including prints and digital copies.</li>
+        <li>Dining Experience: Upgrade to a gourmet meal at one of our exclusive restaurants within the park.</li>
+      </ul>
+    </article>
+    
+    <article id="description" class="panel active w-full" role="tabpanel">
       <h2 class="section-title">Highlights</h2>
       <article>
       <p>{current ? current.excerpt : 'Description not available.'}</p>
